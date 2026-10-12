@@ -7,6 +7,16 @@ public class UpdateUserRequest {
     private Long roleId;
     private boolean active;
 
+    /**
+     * Campo trampa: No se usa para cambiar la contraseña
+     * 
+     * Existe solo para rechazar un "password" que llegue al body, en vez
+     * de ignorarlo en silencio. Sin este campo Jackson descarta la propiedad
+     * desconocida y la petición responde 200: el cliente cree que cambio la contraseña
+     * y no cambio nada.
+     */
+    private String password;
+
     //Getter y setter
     public String getName(){
         return name;
@@ -41,5 +51,14 @@ public class UpdateUserRequest {
 
     public void setActive(boolean active){
         this.active=active;
+    }
+
+    //Getter y setter de password
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password=password;
     }
 }

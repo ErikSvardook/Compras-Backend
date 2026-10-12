@@ -3,6 +3,10 @@ package com.erikjarquin.compras.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -108,6 +112,11 @@ public class UserImpl implements UserService {
     //Actualizar usuario
     @Override
     public UserDto updateUser(Long id, UpdateUserRequest request) {
+        //Editar un usuario no cambia la contraseña
+        if(request.getPassword() != null && !request.getPassword().isBlank()){
+            throw new UserException("La contraseña no se cambia al editar un usuario.", HttpStatus.BAD_REQUEST);
+        }
+        
         UserEntity user = repository.findById(id).orElseThrow(() ->
             new UserException("Usuario no encontrado"));
 
@@ -126,7 +135,7 @@ public class UserImpl implements UserService {
                 .filter(otro -> !otro.getId().equals(id))
                 .ifPresent(otro -> {
                     throw new UserException("El correo ya está registrado",
-                            org.springframework.http.HttpStatus.CONFLICT);
+                            HttpStatus.CONFLICT);
                 });
 
         user.setName(userName);
@@ -143,6 +152,14 @@ public class UserImpl implements UserService {
     //Desactivar usuario
     @Override
     public void deactivateUser(Long id) {
+        //Nadie se da de baja a si mismo
+        UserEntity userActual = currentUserOrNull();
+        
+        if(userActual != null && userActual.getId().equals(id)){
+            throw new UserException("No puedes darte de baja a ti mismo. Pide que otro administrador lo haga.", HttpStatus.CONFLICT);
+        }
+        
+        
         UserEntity user = repository.findById(id).orElseThrow(() ->
             new UserException("Usuario no encontrado"));
 
@@ -173,5 +190,48 @@ public class UserImpl implements UserService {
         user.setDeactivatedAt(null);
         user.setActive(true);
         repository.save(user);
+    }
+
+    /**
+     * Usuario autenticado se esta intentando dar de baja
+     * 
+     * Se lee del SecurityContext, que es donde Spring Security deja
+     * al usuario del JWT ya validado. No se pide por parametro: si el cliente
+     * pudiera decir quien es, el bloqueo de arriba no valdria nada.
+     * 
+     * El principal es un code UserEntity, no un code UserDetails.
+     * Eso lo define JwtFilter, que autentica con la entidad completa
+     * (rol y permisos incluidos). Por eso se lee el principal como entidad
+     * y no se busca al usuario en la base: ya esta cargado, y volver a
+     * consultarlo seria un SELECT extra por peticion.
+     * 
+     * Se copio de SaleImpl en vez de extraerse a un util compartido
+     * porque este necesita un UserRepository: al sacarlo habría que
+     * tocar también SaleImpl.
+     *
+     * Si no hay usuario autenticado devuelve null en vez de fallar:
+     * es lo que hace que los tests unitarios (que no levantan el filtro de
+     * seguridad) sigan funcionando sin montar nada.
+     */
+    private UserEntity currentUserOrNull(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(auth == null || !auth.isAuthenticated()){
+            return null;
+        }
+
+        Object principal = auth.getPrincipal();
+
+        //Spring pone "anonymousUser" un String cuando no hya token
+        if(principal instanceof UserEntity user){
+            return user;
+        }
+
+        //Respaldo sin algún día el filtro cambia a un UserDetails
+        if(principal instanceof UserDetails details){
+            return repository.findByEmail(details.getUsername()).orElse(null);
+        }
+
+        return null;
     }
 }

@@ -8,11 +8,11 @@ import com.erikjarquin.compras.model.dto.Sale.SaleDetailHistoryResponse;
 /**
  * Detalle de una caja concreta (V3, {@code GET /api/local/reports/cash/{cashId}}).
  *
- * <p>Responde "qué se vendió en ESTA caja". Se apoya en el número que escribe
+ * Responde "qué se vendió en ESTA caja". Se apoya en el número que escribe
  * el vendedor al abrir ({@code cash_registers.number}), que es único y por eso
  * identifica un corte sin ambigüedad.
  *
- * <p>Trae los mismos datos congelados que el historial de ventas: al abrir el
+ * Trae los mismos datos congelados que el historial de ventas: al abrir el
  * corte la caja ya no cambia, aunque después se reconstruya el histórico.
  * No incluye ventas anuladas.
  */

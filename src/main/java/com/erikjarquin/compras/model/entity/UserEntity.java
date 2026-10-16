@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code users}: un usuario del sistema con su rol y datos de sesión.
  *
- * <p>La contraseña SIEMPRE se guarda hasheada (BCrypt). Cuando se "elimina"
+ * La contraseña SIEMPRE se guarda hasheada (BCrypt). Cuando se "elimina"
  * un usuario, en realidad se desactiva (active=false) para conservar el
  * historial de ventas. Los campos resetToken/resetTokenExpiration se usan en
  * la recuperación de contraseña (token de 1 hora de validez).
@@ -45,22 +45,22 @@ public class UserEntity {
     private boolean active = true;
 
     /**
-     * Última vez que el usuario se dio de alta (V5).
+     * Última vez que el usuario se dio de alta.
      *
-     * <p>Se informa en la creación y en cada re-activación. Junto con
+     * Se informa en la creación y en cada re-activación. Junto con
      * {@code active} responde "¿desde cuándo es parte del equipo?".
      */
     @Column(name = "activated_at")
     private LocalDateTime activatedAt;
 
     /**
-     * Última vez que el usuario se dio de baja (V5).
+     * Última vez que el usuario se dio de baja.
      *
-     * <p>Solo se informa si {@code active == false}. Es lo que hace posible
+     * Solo se informa si {@code active == false}. Es lo que hace posible
      * buscar el registro de una persona por el rango de fechas en que se fue,
      * algo que con el booleano `active` solo no se podía contestar.
      *
-     * <p>Es la <b>última</b> baja, no un historial: para tener cada cambio
+     * Es la última baja, no un historial: para tener cada cambio
      * haría falta una tabla de auditoría, que no existe (y no hace falta aquí).
      */
     @Column(name = "deactivated_at")

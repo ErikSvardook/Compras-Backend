@@ -25,12 +25,12 @@ import lombok.NoArgsConstructor;
 /**
  * Entidad {@code payments}: pago con tarjeta asociado 1:1 a una venta.
  *
- * <p>SEGURIDAD: solo se persiste los últimos 4 dígitos (lastFourDigits) y el
+ * SEGURIDAD: solo se persiste los últimos 4 dígitos (lastFourDigits) y el
  * código de autorización; NUNCA el número completo de tarjeta ni el PIN.
  * Estados: PENDING → PROCESSING → APPROVED | REJECTED, y APPROVED → REVERSED.
  * transactionId es único (generado por PaymentImpl).
  *
- * <p>@PrePersist/@PreUpdate registran timestamps e inicializan contadores.
+ * @PrePersist/@PreUpdate registran timestamps e inicializan contadores.
  */
 @Entity
 @Table(name = "payments")

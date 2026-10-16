@@ -24,7 +24,7 @@ import jakarta.persistence.UniqueConstraint;
 /**
  * Entidad {@code roles}: agrupa usuarios y les otorga PERMISOS.
  *
- * <p>Relación N:M con PermissionEntity (tabla role_permissions, con UK que
+ * Relación N:M con PermissionEntity (tabla role_permissions, con UK que
  * impide duplicar role+permiso). Los permisos se cargan EAGER porque
  * SecurityAuthorityMapper los necesita en cada request autenticado.
  * users se ignora en JSON para evitar ciclos de serialización.

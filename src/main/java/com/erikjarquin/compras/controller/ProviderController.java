@@ -21,10 +21,10 @@ import com.erikjarquin.compras.service.ProviderService;
  * CRUD de PROVEEDORES (quién nos vende la mercancía de las compras).
  *
  * Público dentro del sistema (autenticado), protegido por permiso:
- *  - VER_PROVEEDORES      → GET (listado y detalle)
- *  - CREAR_PROVEEDORES    → POST
- *  - EDITAR_PROVEEDORES   → PUT /{id}
- *  - ELIMINAR_PROVEEDORES → DELETE /{id}
+ *  - VER_PROVEEDORES      -> GET (listado y detalle)
+ *  - CREAR_PROVEEDORES    -> POST
+ *  - EDITAR_PROVEEDORES   -> PUT /{id}
+ *  - ELIMINAR_PROVEEDORES -> DELETE /{id}
  */
 @RestController
 @RequestMapping("/api/local/providers")

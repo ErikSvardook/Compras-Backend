@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * productId identifica el producto, quantity las unidades y unitCost el costo
  * unitario REAL pagado al proveedor (se copia al producto como su costo).
  *
- * <p><b>unitPrice (V3, 2026-09-30)</b> es el precio de VENTA que se aplicará al
+ * unitPrice es el precio de VENTA que se aplicará al
  * producto al confirmar. Opcional a propósito: si no viene, confirmar deja el
  * precio de venta que el producto ya tiene. Es el campo que hace posible el
  * flujo "reponer stock y de paso revisar el precio de venta" sin que el módulo

@@ -7,7 +7,7 @@ import com.erikjarquin.compras.model.dto.Role.RoleDto;
 import com.erikjarquin.compras.model.entity.RoleEntity;
 
 /**
- * Mapper estático rol → DTO, convirtiendo los permisos asociados a
+ * Mapper estático rol -> DTO, convirtiendo los permisos asociados a
  * PermissionResponse (los usa el frontend para pintar los roles).
  */
 public class RoleMapper {

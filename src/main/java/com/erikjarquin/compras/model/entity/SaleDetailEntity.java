@@ -13,15 +13,15 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code sale_details}: renglón de venta (un producto vendido).
  *
- * <p>Guarda una copia del precio unitario en el momento de la venta (unitPrice)
+ * Guarda una copia del precio unitario en el momento de la venta (unitPrice)
  * para que cambios futuros de precio no alteren el histórico. subtotal =
  * unitPrice * quantity.
  *
- * <p><b>unitCost (V3, 2026-09-30)</b> es el mismo congelamiento pero del COSTO:
+ * unitCost es el mismo congelamiento pero del COSTO:
  * el costo que tenía el producto al momento de venderse. Sin él, la utilidad
  * de una venta pasada había que calcularla con {@code product.cost}, que es el
- * costo del último purchase <i>de hoy</i>: comprar algo más barato mañana
- * reescribía la ganancia de ayer. Nullable porque los renglones anteriores a V3
+ * costo del último purchase de hoy: comprar algo más barato mañana
+ * reescribía la ganancia de ayer. Nullable porque los renglones anteriores
  * se rellenaron con el costo actual como mejor aproximación, y un producto sin
  * costo queda NULL en vez de un 0 que inflaría la utilidad.
  */

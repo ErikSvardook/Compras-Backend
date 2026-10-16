@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
  * se congela el "corte": expectedAmount (fondo inicial + ventas en efectivo),
  * difference (contado - esperado) y los totales por método de pago.
  *
- * number (V3, 2026-09-30) es el número que escribe el vendedor al
+ * number es el número que escribe el vendedor al
  * abrir la caja. Es UNIQUE a propósito: es lo que permite después "filtrar por
  * caja" en Reportes y ver las ventas de cada corte. Si dos cajas pudieran
  * compartir número, el filtro juntaría dos cortes distintos en una misma fila.
@@ -42,10 +42,10 @@ public class CashRegisterEntity {
     private String number;
 
     /**
-     * Motivo del descuadre al cerrar (V3). NULL cuando el corte cuadró
+     * Motivo del descuadre al cerrar. NULL cuando el corte cuadró
      * exactamente.
      *
-     * <p>Existe porque el cierre <b>exige</b> que el efectivo contado coincida
+     * Existe porque el cierre exige que el efectivo contado coincida
      * con el esperado, pero se deja una salida de emergencia: si el cajero está
      * seguro del monto, escribe por qué no cuadra y el cierre proceeds. Sin esta
      * columna el descuadre pasaría sin rastro, y "me sobraron 200" y "me faltaron

@@ -8,7 +8,7 @@ public class SaleDetailResponse {
     private BigDecimal unitPrice;
 
     /**
-     * Costo del producto congelado al momento de la venta (V3). Permite ver la
+     * Costo del producto congelado al momento de la venta. Permite ver la
      * ganancia de la línea (subtotal − quantity × unitCost) sin que un cambio
      * futuro de costo altere el histórico. Null en renglones sin costo conocido.
      */

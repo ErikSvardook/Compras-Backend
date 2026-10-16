@@ -23,9 +23,9 @@ public class SaleDetailHistoryResponse {
     private LocalDateTime cancelledAt;
 
     /**
-     * Usuario que registro la venta (V5).
+     * Usuario que registro la venta.
      *
-     * <p>NULL en las ventas anteriores a V5: el dato no se guardaba y no se
+     * NULL en las ventas anteriores a V5: el dato no se guardaba y no se
      * inventa. El frontend lo muestra como "sin usuario" en vez de "-".
      */
     private Long userId;

@@ -4,7 +4,7 @@ import com.erikjarquin.compras.model.dto.Purchases.ProviderDto;
 import com.erikjarquin.compras.model.entity.ProviderEntity;
 
 /**
- * Mapper estático proveedor ↔ DTO. El servicio usa toEntity para la parte de
+ * Mapper estático proveedor <--> DTO. El servicio usa toEntity para la parte de
  * entrada y toDto para todos los listados/respuestas.
  */
 public class ProviderMapper {

@@ -3,9 +3,9 @@ package com.erikjarquin.compras.exceptions;
 import org.springframework.http.HttpStatus;
 
 /**
- * Excepción de negocio del módulo de reportes (V3, 2026-09-30).
+ * Excepción de negocio del módulo de reportes.
  *
- * Hasta V3 los reportes solo validaban rangos de fechas y lanzaban
+ * Los reportes solo validaban rangos de fechas y lanzaban
  * {@code IllegalArgumentException} (400 vía {@code GlobalExceptionHandler}).
  * El detalle por caja necesita un 404 real: pedir el reporte de una caja que no
  * existe no es "pedí algo mal formado", es "ese recurso no está".

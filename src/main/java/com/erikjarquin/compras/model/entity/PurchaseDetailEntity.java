@@ -13,18 +13,18 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code purchase_details}: renglón de compra (un producto adquirido).
  *
- * <p>Guarda una copia del COSTO unitario en el momento de la compra (unitCost)
+ * Guarda una copia del COSTO unitario en el momento de la compra (unitCost)
  * para que el histórico no cambie aunque después se vuelva a comprar más caro
  * o barato. subtotal = unitCost * quantity. El servicio usa ei unitCost de la
  * compra para actualizar product.cost (el costo real vigente del producto).
  *
- * <p><b>unitPrice (V3, 2026-09-30)</b> es el precio de VENTA que este renglón
+ * unitPrice es el precio de VENTA que este renglón
  * aplica al producto al confirmar la compra. Es una columna distinta de
  * {@code unitCost}: una es lo que se le paga al proveedor y la otra es lo que se
  * le cobra al cliente, y confundirlas es exactamente el error que esta tabla
  * existe para evitar.
  *
- * <p>Es nullable a propósito, y el significado de {@code null} es concreto:
+ * Es nullable a propósito, y el significado de {@code null} es concreto:
  * "esta compra no opina sobre el precio de venta". Entonces confirmar deja el
  * precio que ya tiene el producto. Si fuera NOT NULL no se podría distinguir
  * "no lo llené" de "lo puse en 0", y un 0 dejaría el producto gratis.

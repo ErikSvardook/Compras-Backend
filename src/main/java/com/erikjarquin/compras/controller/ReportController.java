@@ -102,7 +102,7 @@ public class ReportController {
     }
 
     /**
-     * UTILIDAD del rango (V3): ingresos − costo de lo vendido.
+     * UTILIDAD del rango: ingresos − costo de lo vendido.
      *
      * Es el reporte que hace falta para saber si el negocio está ganando
      * dinero. No sirve restar el total de las compras del periodo: ese dinero no
@@ -118,12 +118,12 @@ public class ReportController {
     }
 
     /**
-     * Detalle de UNA caja (V3): qué se vendió en esa caja y cuánto se ganó.
+     * Detalle de UNA caja: qué se vendió en esa caja y cuánto se ganó.
      *
      * Va por {@code cashId} y no por número porque el número es dato de
      * entrada del usuario y el id es la clave real; el frontend resuelve el
-     * número → id con {@code GET /api/local/cash/history}. Una caja inexistente
-     * devuelve <b>404</b> (no un 400), porque el recurso no existe.
+     * número -> id con {@code GET /api/local/cash/history}. Una caja inexistente
+     * devuelve 404 (no un 400), porque el recurso no existe.
      */
     @PreAuthorize("hasAuthority('VER_REPORTES')")
     @GetMapping("/cash/{cashId}")
@@ -132,12 +132,12 @@ public class ReportController {
     }
 
     /**
-     * Reporte de una CAJA FÍSICA con todas sus sesiones (V5).
+     * Reporte de una CAJA FÍSICA con todas sus sesiones.
      *
-     * <p>Reemplaza la pantalla de "corte de caja" por una de "historial de caja":
+     * Reemplaza la pantalla de "corte de caja" por una de "historial de caja":
      * el selector trae cajas y acá se listan sus turnos, cada uno con sus ventas.
      *
-     * <p>Va por {@code boxId} (el id de {@code cash_boxes}) y no por el de un
+     * Va por {@code boxId} (el id de {@code cash_boxes}) y no por el de un
      * turno, porque la caja es lo que el cajero reconoce.
      *
      * @param from   fecha inicial (inclusive). null = sin límite.

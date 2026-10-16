@@ -23,18 +23,16 @@ import com.erikjarquin.compras.model.dto.Cash.OpenCashRequest;
 import com.erikjarquin.compras.service.CashRegisterService;
 
 /**
- * Caja registradora. Cubre DOS recursos distintos (V4):
+ * Caja registradora. Cubre DOS recursos distintos:
  *
- * <ol>
- *   <li><b>Cajas físicas</b> ({@code /boxes}): el inventario de cajas del local.
+ * Cajas físicas ({@code /boxes}): el inventario de cajas del local.
  *       CRUD: listar, crear, editar, dar de baja y borrar (solo si nunca se
- *       abrió).</li>
- *   <li><b>Turnos</b> ({@code /open}, {@code /close}, {@code /active},
+ *       abrió).
+ * Turnos ({@code /open}, {@code /close}, {@code /active},
  *       {@code /summary}, {@code /history}): la apertura y el cierre. Cada
- *       apertura crea un turno nuevo, y una misma caja puede tener muchos.</li>
- * </ol>
+ *       apertura crea un turno nuevo, y una misma caja puede tener muchos.
  *
- * <p>Permisos: ABRIR_CAJA (registrar, editar, dar de baja y abrir cajas),
+ * Permisos: ABRIR_CAJA (registrar, editar, dar de baja y abrir cajas),
  * CERRAR_CAJA, VER_CAJA, CORTE_CAJA.
  * CORS global (${CORS_ALLOWED_ORIGINS}) en SecurityConfig.
  */
@@ -57,7 +55,7 @@ public class CashRegisterController {
     /**
      * Registra una caja física del local.
      *
-     * <p>Es un CRUD, no abrir caja: esto solo la da de alta en el inventario.
+     * Es un CRUD, no abrir caja: esto solo la da de alta en el inventario.
      * Abrir un turno es {@code POST /open}.
      */
     @PreAuthorize("hasAuthority('ABRIR_CAJA')")
@@ -88,7 +86,7 @@ public class CashRegisterController {
     /**
      * Edita una caja (número y descripción).
      *
-     * <p>Usa {@code ABRIR_CAJA} y no un {@code EDITAR_CAJA} nuevo a propósito: el
+     * Usa {@code ABRIR_CAJA} y no un {@code EDITAR_CAJA} nuevo a propósito: el
      * inventario de cajas del local es una lista corta y estático que administra
      * la misma persona que abre el turno. No justificaba un permiso aparte, y
      * agregarlo habríaobligado a tocar el bootstrap de roles y permisos.
@@ -102,7 +100,7 @@ public class CashRegisterController {
 /**
      * Da de ALTA una caja que estaba dada de baja.
      *
-     * <p>La caja conserva su número y todo su historial: reactivarla no crea una
+     * La caja conserva su número y todo su historial: reactivarla no crea una
      * caja nueva, rehabilita la misma. Por eso el número no se puede volver a
      * usar en otra caja.
      */
@@ -116,7 +114,7 @@ public class CashRegisterController {
     /**
      * BORRA una caja física. Solo funciona si NUNCA se abrió.
      *
-     * <p>Con turnos devuelve 409 y el mensaje dice "dala de baja", que es la
+     * Con turnos devuelve 409 y el mensaje dice "dala de baja", que es la
      * salida correcta: sus ventas siguen en el historial y no se pueden perder.
      */
     @PreAuthorize("hasAuthority('ABRIR_CAJA')")
@@ -145,7 +143,7 @@ public class CashRegisterController {
     /**
      * Sugiere el siguiente número libre ("CAJA n") para prellenar el alta de caja.
      *
-     * <p>Es solo una sugerencia: el usuario puede escribir otro. Ya no cuenta
+     * Es solo una sugerencia: el usuario puede escribir otro. Ya no cuenta
      * sobre los cortes (V3) sino sobre las cajas físicas, porque el número ahora
      * es único en {@code cash_boxes} y no en {@code cash_registers}.
      */
@@ -177,7 +175,7 @@ public class CashRegisterController {
     }
 
     /**
-     * Historial de cajas (V3): la mas reciente primero. Es lo que alimenta el
+     * Historial de cajas: la mas reciente primero. Es lo que alimenta el
      * selector "filtrar por caja" de Reportes, asi que se cuelga de
      * {@code VER_CAJA} y no de {@code CORTE_CAJA}: ver una lista de cajas es
      * consultar, no hacer un corte.

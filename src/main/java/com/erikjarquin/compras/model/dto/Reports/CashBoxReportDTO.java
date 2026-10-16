@@ -7,15 +7,15 @@ import java.util.List;
 import com.erikjarquin.compras.model.dto.Sale.SaleDetailHistoryResponse;
 
 /**
- * Reporte de una CAJA FÍSICA y de todas sus SESIONES (V5).
+ * Reporte de una CAJA FÍSICA y de todas sus SESIONES.
  *
- * <p>Es el reemplazo de {@link CashReportDTO} para la pantalla de Reportes. La
- * diferencia es de fondo, no de forma: antes el selector traía <b>turnos</b>
+ * Es el reemplazo de {@link CashReportDTO} para la pantalla de Reportes. La
+ * diferencia es de fondo, no de forma: antes el selector traía turnos
  * (una fila por cada apertura), de modo que una caja abierta diez veces
  * aparecía diez veces y no se distinguía de diez cajas distintas. Ahora el
- * selector trae <b>cajas</b>, y cada caja trae sus turnos adentro.
+ * selector trae cajas, y cada caja trae sus turnos adentro.
  *
- * <p><b>Por qué importa.</b> "CAJA 1" es lo que el cajero reconoce. Pedirle que
+ * Por qué importa. "CAJA 1" es lo que el cajero reconoce. Pedirle que
  * elija entre "CAJA 1" y "CAJA 1" dos veces es pedirle que adivine. Con esta
  * estructura la pregunta "¿qué pasó en CAJA 1?" se responde en una pantalla.
  */
@@ -36,7 +36,7 @@ public class CashBoxReportDTO {
     /**
      * Todos los turnos de la caja, del más reciente al más antiguo.
      *
-     * <p>Con filtros aplicados, solo entran los turnos que tienen al menos una
+     * Con filtros aplicados, solo entran los turnos que tienen al menos una
      * venta que los cumple.
      */
     private List<CashBoxSessionDTO> sessions;
@@ -97,7 +97,7 @@ public class CashBoxReportDTO {
     /**
      * Un TURNO (apertura + cierre) de una caja.
      *
-     * <p><b>Los montos se calculan sobre las ventas que pasan el filtro.</b> Es
+     * Los montos se calculan sobre las ventas que pasan el filtro. Es
      * lo coherente: si el usuario filtra por usuario, el total que ve es el de
      * ese usuario. Por eso, cuando hay filtros, {@code difference} viene null:
      * la diferencia del corte es un dato congelado del turno completo, y
@@ -142,9 +142,9 @@ public class CashBoxReportDTO {
         private BigDecimal difference;
 
         /**
-         * Motivo del descuadre, si el turno se cerró con diferencia (V3).
+         * Motivo del descuadre, si el turno se cerró con diferencia.
          *
-         * <p>Viaja junto a la diferencia y no aparte porque "me sobraron 200" y
+         * Viaja junto a la diferencia y no aparte porque "me sobraron 200" y
          * "me faltaron 200" son opuestos con el mismo síntoma: sin el motivo, el
          * signo de la diferencia no alcanza a explicar qué pasó.
          */
@@ -322,10 +322,10 @@ public class CashBoxReportDTO {
     /**
      * Un vendedor dentro de un turno.
      *
-     * <p>Agrupa las ventas de un mismo usuario para poder responder "¿cuánto
+     * Agrupa las ventas de un mismo usuario para poder responder "¿cuánto
      * vendió cada quien?" sin tener que leer la tabla venta por venta.
      *
-     * <p>{@code userId} y {@code userName} son null cuando la venta no tiene
+     * {@code userId} y {@code userName} son null cuando la venta no tiene
      * usuario: son las ventas anteriores a V5, que no guardaron quién las hizo.
      * Se agrupan bajo {@code null} en vez de inventar un nombre.
      */
@@ -347,7 +347,7 @@ public class CashBoxReportDTO {
         /**
          * Total que vendió este usuario en el turno.
          *
-         * <p><b>Empieza en ZERO, no en null.</b> El service lo va rellenando con
+         * Empieza en ZERO, no en null. El service lo va rellenando con
          * {@code setTotal(getTotal().add(monto))}, y si naciera en null la
          * primera suma lanzaría un {@code NullPointerException}. Es un
          * acumulador: siempre tiene valor.

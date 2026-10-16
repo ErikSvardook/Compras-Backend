@@ -16,7 +16,7 @@ public class SaleHistoryResponse {
     private BigDecimal changeAmount;
     private PaymentStatus paymentStatus;
 
-    // ===== Ciclo de vida de la venta (2026-09-30) =====
+    // ===== Ciclo de vida de la venta =====
     // Se exponen las DOS banderas y no un único "estado" derivado, para que el
     // frontend pueda decidir qué botón pintar sin replicar la máquina de
     // estados del backend:

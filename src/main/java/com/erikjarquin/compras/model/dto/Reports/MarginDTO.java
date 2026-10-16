@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Margen de un producto ({@code GET /api/local/reports/margins}).
  *
- * <p>cost es el último costo real registrado por una compra (0 si nunca se ha
+ * cost es el último costo real registrado por una compra (0 si nunca se ha
  * comprado). margin = price - cost y marginPercent = margin/price*100 (cuanto
  * representa la ganancia sobre el precio de venta). Se ordena de MENOR a MAYOR
  * margen: los primeros son los que conviene renegociar con el proveedor.

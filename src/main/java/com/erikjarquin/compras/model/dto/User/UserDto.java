@@ -11,17 +11,17 @@ public class UserDto {
     private boolean active;
 
     /**
-     * Última vez que se dio de alta (V5).
+     * Última vez que se dio de alta.
      *
-     * <p>Nunca es null en un usuario creado después de V5. En los anteriores
+     * Nunca es null en un usuario creado. En los anteriores
      * puede venir null: el dato no se guardaba.
      */
     private LocalDateTime activatedAt;
 
     /**
-     * Última vez que se dio de baja (V5).
+     * Última vez que se dio de baja.
      *
-     * <p>Solo viene informado si {@code active == false}. Es lo que permite
+     * Solo viene informado si {@code active == false}. Es lo que permite
      * filtrar la tabla de usuarios dados de baja por rango de fechas.
      */
     private LocalDateTime deactivatedAt;

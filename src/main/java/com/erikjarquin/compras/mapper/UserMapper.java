@@ -4,7 +4,7 @@ import com.erikjarquin.compras.model.dto.User.UserDto;
 import com.erikjarquin.compras.model.entity.UserEntity;
 
 /**
- * Mapper estático usuario → DTO.
+ * Mapper estático usuario -> DTO.
  * NUNCA expone el password (ni siquiera hasheado) fuera de la capa de servicio.
  */
 public class UserMapper {
@@ -16,7 +16,7 @@ public class UserMapper {
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
         dto.setActive(entity.isActive());
-        // Fechas de alta y baja (V5): sin esto el frontend no puede filtrar la
+        // Fechas de alta y baja: sin esto el frontend no puede filtrar la
         // tabla de dados de baja por rango de fechas.
         dto.setActivatedAt(entity.getActivatedAt());
         dto.setDeactivatedAt(entity.getDeactivatedAt());

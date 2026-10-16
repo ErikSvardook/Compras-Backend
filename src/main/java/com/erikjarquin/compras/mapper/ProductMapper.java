@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * Mapper producto → ProductDto (componente de Spring).
+ * Mapper producto -> ProductDto (componente de Spring).
  *
- * <p>buildImgUrl antepone {@code app.upload-url} al nombre guardado en BD para
+ * buildImgUrl antepone {@code app.upload-url} al nombre guardado en BD para
  * devolver una URL COMPLETA consumible por <img [src]> en el frontend Angular.
  * Si no hay imagen o no hay URL configurada, devuelve el valor tal cual.
  */

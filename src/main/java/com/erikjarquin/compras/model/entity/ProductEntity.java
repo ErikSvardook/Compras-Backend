@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code products}: artículos del inventario para la venta.
  *
- * <p>{@code img} guarda el NOMBRE del archivo en disco (UUID+ext), no la URL;
+ * {@code img} guarda el NOMBRE del archivo en disco (UUID+ext), no la URL;
  * la URL completa la construye ProductMapper con ${app.upload-url}.
  * barcode y sku son únicos; stock es la cantidad física disponible.
  */
@@ -51,13 +51,13 @@ public class ProductEntity {
     private String img;
 
     /**
-     * Código de barras del producto (V7: <b>obligatorio</b>).
+     * Código de barras del producto (bligatorio).
      *
-     * <p>`nullable = false` debe ir ACOMPAÑADO del `NOT NULL` de la migración
+     * `nullable = false` debe ir ACOMPAÑADO del `NOT NULL` de la migración
      * {@code V7__campos_obligatorios.sql}, y no al revés. La aplicación corre
      * con {@code ddl-auto: validate}, así que Hibernate no toca el esquema: solo
-     * lo <b>comprueba</b> al arrancar. Si la entidad dice que no puede ser nulo y
-     * la columna lo permite, la aplicación <b>no levanta</b>, y ese arranque
+     * lo comprueba al arrancar. Si la entidad dice que no puede ser nulo y
+     * la columna lo permite, la aplicación no levanta, y ese arranque
      * fallido es justamente la red que hace honesto mantener las dos cosas
      * sincronizadas.
      */

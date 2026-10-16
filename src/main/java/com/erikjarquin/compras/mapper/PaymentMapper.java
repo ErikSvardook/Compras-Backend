@@ -7,7 +7,7 @@ import com.erikjarquin.compras.model.entity.PaymentEntity;
 import com.erikjarquin.compras.model.enums.PaymentStatus;
 
 /**
- * Mapper pago → CardPaymentResponse (componente de Spring).
+ * Mapper pago -> CardPaymentResponse (componente de Spring).
  * Construye el mensaje de cara al usuario según el estado final del pago.
  */
 @Component

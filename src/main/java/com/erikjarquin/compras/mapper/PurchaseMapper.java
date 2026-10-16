@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Mapper estático compra → PurchaseDTO. Requiere que los listados vengan con
+ * Mapper estático compra -> PurchaseDTO. Requiere que los listados vengan con
  * provider y details.product precargados (lo garantiza @EntityGraph del
  * repositorio) para leer providerName y productName sin consultas extra.
  */
@@ -24,7 +24,7 @@ public class PurchaseMapper {
         dto.setPurchaseDate(entity.getPurchaseDate());
         dto.setTotal(entity.getTotal());
 
-        //Ciclo de vida de la compra (V3): el frontend lo usa para pintar el
+        //Ciclo de vida de la compra: el frontend lo usa para pintar el
         //estado y para decidir si el botón "Confirmar" tiene sentido.
         dto.setConfirmed(entity.isConfirmed());
         dto.setConfirmedAt(entity.getConfirmedAt());
@@ -51,7 +51,7 @@ public class PurchaseMapper {
         PurchaseItemDTO item = new PurchaseItemDTO();
         item.setQuantity(detail.getQuantity());
         item.setUnitCost(detail.getUnitCost());
-        item.setUnitPrice(detail.getUnitPrice()); //V3: precio de venta del renglón
+        item.setUnitPrice(detail.getUnitPrice()); //Precio de venta del renglón
         item.setSubtotal(detail.getSubtotal());
 
         if(detail.getProduct() != null){

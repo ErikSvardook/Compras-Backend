@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code permissions}: acción individual autorizable.
  *
- * <p>name es el enum PermissionName (32 valores) y se persiste como String.
+ * name es el enum PermissionName (32 valores) y se persiste como String.
  * equals/hashCode se basan SOLO en name (necesario para que los Sets de
  * permisos funcionen y el bootstrap los compare por nombre).
  */

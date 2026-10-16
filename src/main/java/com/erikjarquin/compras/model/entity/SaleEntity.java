@@ -25,42 +25,30 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code sales}: cabecera de una venta.
  *
- * <p>Relaciones: 1:N a SaleDetailEntity (productos vendidos, cascade ALL +
+ * Relaciones: 1:N a SaleDetailEntity (productos vendidos, cascade ALL +
  * orphanRemoval), N:1 a CashRegisterEntity (caja donde se registró) y 1:1 a
  * PaymentEntity (solo si fue pagada con tarjeta). paymentStatus recorre:
  * PENDING → APPROVED | REJECTED | REVERSED.
  *
- * <h2>Ciclo de vida de la venta (agregado 2026-09-30)</h2>
+ * Ciclo de vida de la venta
  *
- * <p>Una venta tiene DOS ejes de estado INDEPENDIENTES y no se mezclan:
- *
- * <table border="1">
- *   <caption>Los dos ejes</caption>
- *   <tr><th>Eje</th><th>Campos</th><th>Pregunta que responde</th></tr>
- *   <tr><td>Pago</td><td>{@code paymentStatus}</td>
- *       <td>¿Se cobró el dinero? (PENDING/APPROVED/REJECTED/REVERSED)</td></tr>
- *   <tr><td>Venta</td><td>{@code confirmed}, {@code cancelled}</td>
- *       <td>¿El cliente ya se llevó el pedido? ¿Se anuló?</td></tr>
- * </table>
- *
- * <p>Son ejes separados porque una venta con tarjeta APROBADA puede estar
+ * Son ejes separados porque una venta con tarjeta APROBADA puede estar
  * CANCELADA: se cobró y después se devolvió el dinero. Meter un estado
  * "CANCELLED" dentro de {@link PaymentStatus} habría mezclado "estado del pago"
  * con "estado de la venta" y habría hecho touched también al CHECK
  * {@code payments_status_check} de la BD.
  *
- * <p><b>Reglas (las aplica SaleImpl, no la entidad):</b>
- * <ul>
- *   <li>Venta recien creada: {@code confirmed=false}, {@code cancelled=false}
- *       → se puede anular (error de caja).</li>
- *   <li>Confirmada: {@code confirmed=true} → CONGELADA. Ya no se anula ni se
- *       borra jamás, porque el stock y el dinero son reales.</li>
- *   <li>Anulada: {@code cancelled=true} → el stock volvió al inventario, pero
- *       la fila se CONSERVA (auditoría: no se borran ventas).</li>
- *   <li>Nunca ambas a la vez: son mutuamente excluyentes.</li>
- * </ul>
+ * Reglas (las aplica SaleImpl, no la entidad):
+ * 
+ *   Venta recien creada: {@code confirmed=false}, {@code cancelled=false}
+ *       -> se puede anular (error de caja).
+ *   Confirmada: {@code confirmed=true} -> CONGELADA. Ya no se anula ni se
+ *       borra jamás, porque el stock y el dinero son reales.
+ *   Anulada: {@code cancelled=true} -> el stock volvió al inventario, pero
+ *       la fila se CONSERVA (auditoría: no se borran ventas).
+ *   Nunca ambas a la vez: son mutuamente excluyentes.
  *
- * <p>Por qué {@code boolean} y no un {@code enum}: un enum obligaría a que las
+ * Por qué {@code boolean} y no un {@code enum}: un enum obligaría a que las
  * filas ya existentes migraran de un valor a otro y a que el estado "no
  * decidido" fuera un valor más. Con dos banderas el estado inicial es el valor
  * natural (false/false) y {@code DEFAULT false} deja las ventas históricas en
@@ -96,18 +84,18 @@ public class SaleEntity {
     private CashRegisterEntity cashRegister;
 
     /**
-     * Usuario (empleado) que registró la venta (V5).
+     * Usuario (empleado) que registró la venta.
      *
-     * <p>Es lo que permite responder "¿qué caja vendió Juan?" y "¿cuánto vendió
+     * Es lo que permite responder "¿qué caja vendió Juan?" y "¿cuánto vendió
      * cada cajero?": antes la venta solo apuntaba al turno, y de un turno no se
      * puede saber quién cobró cada ticket.
      *
-     * <p><b>LAZY</b> porque el filtro por usuario solo necesita el id (que ya
+     * LAZY porque el filtro por usuario solo necesita el id (que ya
      * viene en la propia venta) y el nombre se pide en una consulta aparte de
      * reportes. Con EAGER, listar el historial de ventas haría un SELECT extra
      * por venta.
      *
-     * <p><b>NULL en las ventas anteriores a V5</b>: el dato nunca se guardó y no
+     * NULL en las ventas anteriores: el dato nunca se guardó y no
      * se inventa. Por eso el filtro por usuario solo aplica a ventas nuevas.
      */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -122,7 +110,7 @@ public class SaleEntity {
 
     // ===== Ciclo de vida de la venta (ver V2__venta_confirmada.sql) =====
     // `nullable = false` en el mapeo NO es lo mismo que un NOT NULL en BD: la
-    // BD ya lo garantiza (V2), JPA solo lo documenta. El `columnDefinition` fija
+    // BD ya lo garantiza, JPA solo lo documenta. El `columnDefinition` fija
     // el DEFAULT para que un INSERT que no mencione la columna (p. ej. un
     // test que arma la entidad a mano) guarde false y no null.
 
@@ -224,20 +212,20 @@ public class SaleEntity {
     }
 
     /**
-     * Clave de idempotencia del intento de cobro (V6).
+     * Clave de idempotencia del intento de cobro.
      *
-     * <p>El cliente la genera (un UUID por intento) y la repite en cada reintento
+     * El cliente la genera (un UUID por intento) y la repite en cada reintento
      * del MISMO cobro. Si la clave ya existe en la tabla, el backend devuelve la
      * venta ya creada en vez de crear otra: sin esto, un doble "Enter" en el
      * modal de cobro descuenta el stock dos veces y genera dos tickets por una
      * sola compra.
      *
-     * <p><b>La genera el CLIENTE, no el servidor.</b> Si la generara el backend en
+     * La genera el CLIENTE, no el servidor. Si la generara el backend en
      * cada petición, cada una sería distinta y la protección no serviría de
      * nada: la clave tiene que viajar con la intención de cobro, no con la
      * llamada.
      *
-     * <p>Es nullable: las ventas anteriores a V6 y las creadas por otros caminos
+     * Es nullable: las ventas anteriores y las creadas por otros caminos
      * no la tienen. En PostgreSQL un UNIQUE admite varios NULL (porque
      * NULL != NULL), así que no estorban.
      */

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Un punto de la tendencia de ventas ({@code GET /api/local/reports/trend}).
  *
- * <p>{@code period} es a string ISO según la agrupación pedida: "yyyy-MM-dd"
+ * {@code period} es a string ISO según la agrupación pedida: "yyyy-MM-dd"
  * (DÍA), "yyyy-MM" (MES) o "yyyy" (AÑO). {@code total} es la suma de ventas
  * APPROVED del periodo y {@code count} el número de tickets.
  */

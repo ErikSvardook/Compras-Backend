@@ -14,7 +14,7 @@ public class PurchaseItemDTO {
     private BigDecimal unitCost;
 
     /**
-     * Precio de VENTA aplicado al producto al confirmar (V3). Se devuelve para
+     * Precio de VENTA aplicado al producto al confirmar. Se devuelve para
      * que el frontend muestre "costo de compra" y "precio de venta" juntos en
      * el renglón, que es donde el usuario compara si el margen sigue siendo
      * sano. NULL = la compra no cambió el precio de venta.

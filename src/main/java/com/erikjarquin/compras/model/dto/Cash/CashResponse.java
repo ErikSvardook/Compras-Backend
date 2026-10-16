@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 /**
  * Respuesta de caja: el estado de una caja y, si está cerrada, su corte.
  *
- * <p>Se usa la misma clase para la caja recién creada, la activa, la cerrada y la
+ * Se usa la misma clase para la caja recién creada, la activa, la cerrada y la
  * del historial. Los campos que todavía no aplican a una caja recién creada
  * (que aún no abre) vienen en null: por eso el frontend tiene que comprobarlos
  * antes de mostrarlos.
@@ -15,7 +15,7 @@ public class CashResponse {
     private Long id;
 
     /**
-     * Número de la caja (V3). Es lo que se muestra en la lista de cajas de
+     * Número de la caja. Es lo que se muestra en la lista de cajas de
      * Reportes y lo que el usuario elige para filtrar. Nonnull desde V3: se
      * asigna al CREAR la caja, no al abrirla.
      */
@@ -30,7 +30,7 @@ public class CashResponse {
     private BigDecimal difference;
 
     /**
-     * Motivo del descuadre al cerrar (V3). NULL = el corte cuadró exactamente. Si
+     * Motivo del descuadre al cerrar. NULL = el corte cuadró exactamente. Si
      * tiene valor, el cierre se hizo con la salida de emergencia y hay que
      * investigarlo: significa que el dinero contado no coincide con el esperado y
      * alguien decidió cerrar de todos modos, dejando constancia del por qué.

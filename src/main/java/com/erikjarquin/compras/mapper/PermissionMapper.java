@@ -4,7 +4,7 @@ import com.erikjarquin.compras.model.dto.Permissions.PermissionResponse;
 import com.erikjarquin.compras.model.entity.PermissionEntity;
 
 /**
- * Mapper estático permiso → DTO. El constructor privado evita instanciarlo
+ * Mapper estático permiso -> DTO. El constructor privado evita instanciarlo
  * (solo expone el método estático toDto).
  */
 public class PermissionMapper {

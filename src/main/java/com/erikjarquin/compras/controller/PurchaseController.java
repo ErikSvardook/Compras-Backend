@@ -22,10 +22,10 @@ import com.erikjarquin.compras.service.PurchaseService;
  * Módulo de COMPRAS: registro de mercancía comprada a proveedores.
  *
  * Público dentro del sistema (autenticado), protegido por permiso:
- *  - VER_COMPRAS        → GET (todos, por proveedor y detalle)
- *  - CREAR_COMPRAS      → POST (registra la compra PENDIENTE, sin efecto en stock)
- *  - CONFIRMAR_COMPRAS  → PATCH /{id}/confirm (suma stock y guarda el costo real)
- *  - CANCELAR_COMPRAS   → DELETE /{id} (borra la compra; 409 si está confirmada)
+ *  - VER_COMPRAS        -> GET (todos, por proveedor y detalle)
+ *  - CREAR_COMPRAS      -> POST (registra la compra PENDIENTE, sin efecto en stock)
+ *  - CONFIRMAR_COMPRAS  -> PATCH /{id}/confirm (suma stock y guarda el costo real)
+ *  - CANCELAR_COMPRAS   -> DELETE /{id} (borra la compra; 409 si está confirmada)
  */
 @RestController
 @RequestMapping("/api/local/purchases")
@@ -68,7 +68,7 @@ public class PurchaseController {
      * CONFIRMAR una compra: la mercancía entró al almacén, así que ahora sí
      * suma el stock de sus productos y guarda el costo real de cada uno.
      *
-     * Se usa PATCH y no PUT porque es un cambio <b>parcial de
+     * Se usa PATCH y no PUT porque es un cambio parcial de
      * estado: un PUT reenviaría la compra entera y podría pisar el total o los
      * renglones. Mismo criterio que {@code PATCH /api/local/sales/{id}/confirm}.
      *

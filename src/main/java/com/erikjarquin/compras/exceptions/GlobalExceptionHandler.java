@@ -120,7 +120,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Reportes (V3): 404 cuando se pide el detalle de una caja que no existe.
+     * Reportes: 404 cuando se pide el detalle de una caja que no existe.
      * El código lo declara el servicio (ReportException) y el handler solo lo
      * traduce, como con ventas y compras.
      */

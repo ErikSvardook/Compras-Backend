@@ -3,7 +3,7 @@ package com.erikjarquin.compras.mapper;
 import com.erikjarquin.compras.model.dto.Categories.CategoryDto;
 import com.erikjarquin.compras.model.entity.CategoryEntity;
 /**
- * Mapper estático categoría ↔ DTO (solo id+name).
+ * Mapper estático categoría <--> DTO (solo id+name).
  */
 public class CategoryMapper {
     

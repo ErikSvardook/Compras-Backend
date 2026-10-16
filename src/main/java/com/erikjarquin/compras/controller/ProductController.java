@@ -53,7 +53,7 @@ public class ProductController {
     /**
      * Crear un nuevo producto.
      *
-     * price y stock llegan como String y no como BigDecimal/int (V3). A
+     * price y stock llegan como String y no como BigDecimal/int. A
      * propósito: para poder rechazar "1.875", "000.2" o "1e5" hay que mirar el
      * TEXTO que escribió el usuario. Si Spring lo convirtiese primero, "000.2"
      * ya habría llegado como {@code 0.2} y el cero a la izquierda se habría

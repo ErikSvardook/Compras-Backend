@@ -5,23 +5,21 @@ import java.math.BigDecimal;
 /**
  * Utilidad de un periodo ({@code GET /api/local/reports/profit}, V3).
  *
- * <p>Es el reporte que responde "¿cuánto gané?", y para eso hace falta el
- * <b>costo de lo vendido</b>, no el total de las compras del periodo. Son dos
+ * Es el reporte que responde "¿cuánto gané?", y para eso hace falta el
+ * costo de lo vendido, no el total de las compras del periodo. Son dos
  * cifras distintas y confundirlas es el error clásico:
- * <ul>
- *   <li><b>compras del periodo</b>: dinero que salió, pero todavía está en el
- *       almacén. Gastarlo todo como si fuera pérdida subestima la utilidad.</li>
- *   <li><b>costo de lo vendido</b> ({@code costOfGoodsSold}): lo que costó
+ *   compras del periodo: dinero que salió, pero todavía está en el
+ *       almacén. Gastarlo todo como si fuera pérdida subestima la utilidad.
+ *   costo de lo vendido ({@code costOfGoodsSold}): lo que costó
  *       específicamente lo que los clientes ya se llevaron. Es lo que se
- *       descuenta del ingreso.</li>
- * </ul>
+ *       descuenta del ingreso.
  *
- * <p>El costo sale de {@code sale_details.unitCost}, el costo CONGELADO en el
+ * El costo sale de {@code sale_details.unitCost}, el costo CONGELADO en el
  * renglón al momento de vender. Si se usara {@code product.cost} (el del
  * último purchase de hoy) comprar algo más barato mañana reescribiría la
  * ganancia de ayer.
  *
- * <p>Excluye ventas anuladas y con pago no aprobado, igual que los demás
+ * Excluye ventas anuladas y con pago no aprobado, igual que los demás
  * reportes.
  */
 public class ProfitDTO {
@@ -45,7 +43,7 @@ public class ProfitDTO {
 
     /**
      * Renglones vendidos SIN costo conocido (0 en ventas nuevas; posible en
-     * ventas anteriores a V3). Existe para poder avisar en pantalla en vez de
+     * ventas anteriores). Existe para poder avisar en pantalla en vez de
      * mostrar una utilidad inflada sin que nadie entienda por qué.
      */
     private long itemsWithoutCost;

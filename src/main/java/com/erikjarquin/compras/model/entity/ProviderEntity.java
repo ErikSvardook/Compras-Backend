@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code providers}: proveedor de mercancía (compras).
  *
- * <p>rfc y name son el dato de negocio clave: rfc es UNIQUE (un proveedor no
+ * rfc y name son el dato de negocio clave: rfc es UNIQUE (un proveedor no
  * puede duplicarse) y name identifica al negocio. phone/email son opcionales.
  * No se guarda relación inversa con purchases para evitar cargas innecesarias;
  * la integridad al borrar la valida el servicio (409 si tiene compras).

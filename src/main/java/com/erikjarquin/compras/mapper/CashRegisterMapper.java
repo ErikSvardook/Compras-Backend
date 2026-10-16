@@ -6,7 +6,7 @@ import com.erikjarquin.compras.model.dto.Cash.CashResponse;
 import com.erikjarquin.compras.model.entity.CashRegisterEntity;
 
 /**
- * Mapper caja → CashResponse (componente de Spring, inyectado por
+ * Mapper caja -> CashResponse (componente de Spring, inyectado por
  * CashRegisterImpl). closingAmount es el dinero CONTADO por el cajero
  * (countedAmount), distinto del esperado según sistema.
  */

@@ -57,7 +57,7 @@ public class SaleController {
             return ResponseEntity.ok(response);
         }
         catch(DataIntegrityViolationException e){
-            /*====== IDEMPOTENCIA (V6): DOS PETICIONES DEL MISMO COBRO A LA VEZ ======
+            /*====== IDEMPOTENCIA: DOS PETICIONES DEL MISMO COBRO A LA VEZ ======
 
               Este es el ÚNICO caso que la comprobación previa de SaleImpl no
               puede cubrir, y es importante entender por qué.
@@ -133,7 +133,7 @@ public class SaleController {
      * ANULAR una venta: devuelve el stock al inventario y conserva el registro
      * con {@code cancelled = true}.
      *
-     * <p>No borra la fila. En un POS el historial es evidencia contable: una
+     * No borra la fila. En un POS el historial es evidencia contable: una
      * venta anulada que desaparece deja el mismo hueco en los números que una
      * venta que nunca existió, y no hay forma de auditar quién la quitó.
      *

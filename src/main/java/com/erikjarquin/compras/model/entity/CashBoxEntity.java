@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 /**
   Entidad cash_boxes: el registro de las cajas fisicas del local
-  Hasta V3 no habia ninguna: cada fila de cash_registers era "una caja" y por eso esa
+  No habia ninguna: cada fila de cash_registers era "una caja" y por eso esa
   fila se cerraba una sola vez, para siempre. Pero un negocio real tiene dos o tres
   cajas que se abren y cierran todas los días.
   */

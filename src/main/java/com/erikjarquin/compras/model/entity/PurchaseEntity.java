@@ -18,11 +18,11 @@ import jakarta.persistence.Table;
 /**
  * Entidad {@code purchases}: cabecera de una compra a un proveedor.
  *
- * <p>Relaciones: 1:N a PurchaseDetailEntity (artículos comprados, cascade ALL +
+ * Relaciones: 1:N a PurchaseDetailEntity (artículos comprados, cascade ALL +
  * orphanRemoval, mismo patrón que sales/details) y N:1 a ProviderEntity (quién
  * nos vendió). total = Σ unitCost * quantity de los detalles.
  *
- * <p>Efectos secundarios al registrar/cancelar (transaccionales, en el
+ * Efectos secundarios al registrar/cancelar (transaccionales, en el
  * servicio): la compra SUMA stock del producto y guarda su costo real; la
  * cancelación lo revierte.
  */
@@ -48,22 +48,22 @@ public class PurchaseEntity {
 
     private BigDecimal total;
 
-    //---- Ciclo de vida de la compra (V3, 2026-09-30) ----
+    //---- Ciclo de vida de la compra ----
 
     /**
      * {@code true} = la compra está CONFIRMADA: la mercancía entró al almacén y
      * ya se le sumó el stock y se guardó el costo real del producto. Desde este
-     * punto es <b>inmutable</b>: no se puede cancelar, porque el stock ya se usó
+     * punto es inmutable: no se puede cancelar, porque el stock ya se usó
      * o se vendió y "deshacerlo" escribiría inventario falso.
      *
-     * <p>{@code false} = la compra está PENDIENTE: se registró pero <b>no tocó
-     * el inventario</b>. Se puede cancelar (se borra, sin revertir nada).
+     * {@code false} = la compra está PENDIENTE: se registró pero no tocó
+     * el inventario. Se puede cancelar (se borra, sin revertir nada).
      *
-     * <p>Es el mismo patrón que {@code confirmed}/{@code cancelled} de la venta
-     * (V2) y por la misma razón: el estado terminal es lo que protege al
+     * Es el mismo patrón que {@code confirmed}/{@code cancelled} de la venta
+     * y por la misma razón: el estado terminal es lo que protege al
      * inventario. Antes de esta migración, crear la compra ya sumaba stock de
      * inmediato; las compras que ya existían se marcaron confirmadas en el
-     * backfill de V3, porque su stock <i>ya</i> se había aplicado.
+     * backfill, porque su stock ya se había aplicado.
      */
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean confirmed;

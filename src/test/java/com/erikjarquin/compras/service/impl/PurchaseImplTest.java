@@ -35,26 +35,25 @@ import com.erikjarquin.compras.repository.PurchaseRepository;
 /**
  * Tests unitarios de PurchaseImpl (Mockito, sin BD).
  *
- * <p>Verifican la REGLA DE NEGOCIO del módulo en su diseño V3: registrar una
- * compra <b>no</b> toca el inventario, {@code confirm} es lo que suma stock y
+ * Verifican la REGLA DE NEGOCIO del módulo en su diseño: registrar una
+ * compra no toca el inventario, {@code confirm} es lo que suma stock y
  * guarda el costo, y una compra confirmada ya no se puede cancelar.
  *
- * <h3>Por qué estos tests parecen "repetir" lo obvio</h3>
+ * Por qué estos tests parecen "repetir" lo obvio
  *
- * <p>La tentación es pensar que "crear no suma stock" no necesita un test. Sí
- * lo necesita, y mucho: hasta V2 {@code create()} SÍ sumaba stock, y ese
+ * La tentación es pensar que "crear no suma stock" no necesita un test. Sí
+ * lo necesita, y mucho: {@code create()} SÍ sumaba stock, y ese
  * {@code verify(productRepository, never()).save(...)} es lo que impide que
  * alguien reintroduzca el efecto "de paso" cuando agregue un campo nuevo.
  *
- * <h3>El bug del {@code Math.max}, ahora estructuralmente imposible</h3>
+ * El bug del {@code Math.max}, ahora estructuralmente imposible
  *
- * <p>El bug de 2026-09-30 (comprar 10 → vender 5 → cancelar escribía un
- * {@code Math.max(5 - 10, 0)} = <b>0 falso</b> con 5 unidades ya vendidas y
- * devolvía 200 OK) se cubría con una validación de stock en dos fases. En V3
- * ese escenario ya no se puede representar: la compra pendiente nunca tocó el
+ * (comprar 10 -> vender 5 -> cancelar escribía un
+ * {@code Math.max(5 - 10, 0)} = 0 falso con 5 unidades ya vendidas y
+ * devolvía 200 OK) se cubría con una validación de stock en dos fases. Ese escenario ya no se puede representar: la compra pendiente nunca tocó el
  * inventario, así que no hay nada que deshacer. Los tests lo fijan desde el otro
  * lado: {@code cancelarCompra_pendiente_nuncaLeeLosProductos} exige que cancelar
- * ni siquiera <b>consulte</b> los productos, y
+ * ni siquiera consulte los productos, y
  * {@code confirmarCompra_pendiente_sumaStockYGuardaCosto} exige que el stock se
  * aplique una sola vez.
  */
@@ -104,7 +103,7 @@ class PurchaseImplTest {
     }
 
     // =========================================================================
-    //  REGISTRAR: nace PENDIENTE y NO toca el inventario (V3)
+    //  REGISTRAR: nace PENDIENTE y NO toca el inventario
     // =========================================================================
 
     @Test
@@ -195,22 +194,20 @@ class PurchaseImplTest {
     }
 
     /**
-     * <b>LA CARRERA DE STOCK DUPLICADO (V3).</b> Este es el test que blinda el
+     * LA CARRERA DE STOCK DUPLICADO. Este es el test que blinda el
      * arreglo de concurrencia.
      *
-     * <p>Simula exactamente lo que pasa con dos peticiones simultáneas:
-     * <ol>
-     *   <li>La petición A llega primero: su {@code markConfirmedIfPending} actualiza
-     *       1 fila, porque la compra estaba pendiente.</li>
-     *   <li>La petición B llega con la compra <b>todavía cacheada como pendiente</b>
+     * Simula exactamente lo que pasa con dos peticiones simultáneas:
+     *   La petición A llega primero: su {@code markConfirmedIfPending} actualiza
+     *       1 fila, porque la compra estaba pendiente.
+     *   La petición B llega con la compra todavía cacheada como pendiente
      *       (leída antes de que A escribiera), pero al ejecutar su UPDATE la
      *       condición {@code confirmed = false} ya no se cumple y devuelve
-     *       <b>0 filas</b>.</li>
-     * </ol>
+     *       0 filas.
      *
-     * <p>El detalle que hace el test valioso: la entidad en memoria de B todavía
+     * El detalle que hace el test valioso: la entidad en memoria de B todavía
      * dice {@code confirmed = false}, o sea que un {@code if (entity.isConfirmed())}
-     * <b>la habría dejado sumar el stock y la mercancía quedaría duplicada</b>. Lo
+     * la habría dejado sumar el stock y la mercancía quedaría duplicada. Lo
      * que la salva es que el código decide por el número de filas afectadas, no
      * por el estado que leyó.
      */
@@ -291,11 +288,11 @@ class PurchaseImplTest {
     }
 
     // =========================================================================
-    //  El precio de VENTA del renglón (V3) — se escribe al CONFIRMAR
+    //  El precio de VENTA del renglón — se escribe al CONFIRMAR
     // =========================================================================
 
     /**
-     * Confirmar actualiza <b>las dos</b> columnas del producto: el stock y el
+     * Confirmar actualiza las dos columnas del producto: el stock y el
      * precio de venta. Es el cambio de regla que pidió el dueño: al reponer stock
      * se escribe también a qué precio se va a vender ese lote.
      */
@@ -330,7 +327,7 @@ class PurchaseImplTest {
      * Si el renglón NO trae precio de venta (null), el producto conserva el que
      * ya tenía.
      *
-     * <p>Es lo que hace que el campo sea opcional de verdad: un cliente que no
+     * Es lo que hace que el campo sea opcional de verdad: un cliente que no
      * llena la caja no debe ver el producto con precio 0.
      */
     @Test
@@ -398,19 +395,15 @@ class PurchaseImplTest {
                 .hasMessageContaining("no encontrada");
     }
 
-    // =========================================================================
-    //  CASO QUE CUBRE EL BUG ORIGINAL (2026-09-30), ahora por otra vía
-    // =========================================================================
-
     /**
      * El escenario reportado por el usuario: comprar 10, vender 5 (quedan 5) y
      * luego cancelar la compra.
      *
-     * <p>El código viejo hacía {@code 5 - 10 = -5} y luego
+     * El código viejo hacía {@code 5 - 10 = -5} y luego
      * {@code Math.max(-5, 0) = 0}: reportaba "0 en almacén" con 5 unidades ya
      * vendidas y devolvía 200 OK.
      *
-     * <p>Hoy, con el stock en 5 y la compra en estado PENDIENTE, ese escenario
+     * Hoy, con el stock en 5 y la compra en estado PENDIENTE, ese escenario
      * es imposible por construcción: una compra pendiente no suman stock. Y si
      * la compra está CONFIRMADA, se rechaza con 409. Este test fija el segundo
      * caso, que es el que el usuario podría alcanzar: no se escribe nada.
@@ -447,9 +440,9 @@ class PurchaseImplTest {
     }
 
     /**
-     * Cancelar una compra confirmada da 409 <b>aunque el stock de sobra</b>.
+     * Cancelar una compra confirmada da 409 aunque el stock de sobra.
      *
-     * <p>Este es el test que mejor explica por qué el estado es lo que manda y
+     * Este es el test que mejor explica por qué el estado es lo que manda y
      * no el stock: con 50 unidades en almacén la validación antigua habría
      * permitido "deshacer" la compra y restado 10, dejando el inventario
      * inconsistente con lo que realmente llegó. El costo y el stock ya son

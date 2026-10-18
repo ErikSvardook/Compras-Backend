@@ -43,7 +43,7 @@ public interface ReportsService {
     CashReportDTO getCashReport(Long cashId);
 
     /**
-     * Reporte de una CAJA FISICA con todas sus sesiones (V5).
+     * Reporte de una CAJA FISICA con todas sus sesiones.
      *
      * @param boxId  id de {@code cash_boxes}
      * @param from   fecha inicial (inclusive); null = sin limite

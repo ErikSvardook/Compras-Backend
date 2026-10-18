@@ -34,8 +34,8 @@ import com.erikjarquin.compras.service.PaymentService;
 /**
  * Tests del controlador de pagos con tarjeta.
  *
- * <p>Cubre cobro, consulta de estado, reintento y REVERSA (POST /reverse/{id}),
- * que es el endpoint sin UI mencionado en el AGENTS.md: aquí se documenta su
+ * Cubre cobro, consulta de estado, reintento y REVERSA (POST /reverse/{id}),
+ * que es el endpoint sin UI: aquí se documenta su
  * contrato HTTP (200 con true/false) para cuando el frontend agregue el listado
  * de pagos que permita invocarlo.
  */
@@ -86,7 +86,7 @@ class PaymentControllerTest {
     @Test
     @WithMockUser(authorities = "PROCESAR_PAGOS")
     void cobrarConTarjeta_rechazada_devuelve402() throws Exception {
-        // El handler de PaymentException reconoce "rechazado" → 402 PAYMENT_REJECTED.
+        // El handler de PaymentException reconoce "rechazado" -> 402 PAYMENT_REJECTED.
         when(paymentService.processCardPayment(any()))
                 .thenThrow(new PaymentException("Pago rechazado: fondos insuficientes"));
 

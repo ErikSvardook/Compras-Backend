@@ -14,7 +14,7 @@ import com.erikjarquin.compras.model.dto.Sale.SaleResponse;
  * consultar historial y gestionar su ciclo de vida. Ver
  * {@code service/impl/SaleImpl}.
  *
- * Ciclo de vida (agregado 2026-09-30)
+ * Ciclo de vida
  *
  * Una venta nace ABIERTA ({@code confirmed=false}, {@code cancelled=false}).
  * Desde ahí tiene exactamente dos salidas y nunca vuelve atrás:

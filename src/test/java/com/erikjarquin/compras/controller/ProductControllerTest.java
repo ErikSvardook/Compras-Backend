@@ -39,7 +39,7 @@ import com.erikjarquin.compras.service.ProductService;
 /**
  * Tests del controlador de productos.
  *
- * <p>Cubre el listado (con/sin filtro de categoría), búsquedas, el alta
+ * Cubre el listado (con/sin filtro de categoría), búsquedas, el alta
  * multipart (imagen opcional), el borrado y el mapeo del conflicto 409 cuando
  * el producto tiene ventas/compras asociadas.
  */

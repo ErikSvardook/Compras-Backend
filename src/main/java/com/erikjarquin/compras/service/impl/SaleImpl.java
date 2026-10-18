@@ -195,12 +195,12 @@ public class SaleImpl implements SaleService {
     }
 
     /**
-     * Busca una venta ya creada con esta clave de idempotencia (V6).
+     * Busca una venta ya creada con esta clave de idempotencia.
      *
-     * <p>Devuelve {@code null} si la clave viene vacía o no existe, que es el
+     * Devuelve {@code null} si la clave viene vacía o no existe, que es el
      * caso normal de una venta nueva.
      *
-     * <p><b>Por qué el método NO lleva {@code @Transactional}:</b> la anotación
+     * Por qué el método NO lleva {@code @Transactional}: la anotación
      * de la clase ya abre una transacción, y aquí solo hace falta una lectura
      * para decidir. Declararlo además sería redundante.
      */
@@ -216,11 +216,11 @@ public class SaleImpl implements SaleService {
 
     /**
      * Venta ya registrada con esa clave, para la red de seguridad del
-     * controlador (V6).
+     * controlador.
      *
-     * <p>Se declara {@code @Transactional(readOnly = true)} a PROPÓSITO, y es un
+     * Se declara {@code @Transactional(readOnly = true)} a PROPÓSITO, y es un
      * detalle importante: esta lectura se hace desde el
-     * {@code @CatchAndRecoverStyle} del controlador, es decir, <b>después</b> de
+     * {@code @CatchAndRecoverStyle} del controlador, es decir, después de
      * que la transacción de la venta perdedora ya revirtió. Abrir aquí una
      * transacción nueva es lo que permite que la lectura sea válida: leer en la
      * transacción ya marcada como rollback-only lanzaría
@@ -235,13 +235,13 @@ public class SaleImpl implements SaleService {
     }
 
     /**
-     * Normaliza la clave de idempotencia (V6).
+     * Normaliza la clave de idempotencia.
      *
-     * <p>Devuelve {@code null} si no viene o viene en blanco, para que la
+     * Devuelve {@code null} si no viene o viene en blanco, para que la
      * consulta no busque por una cadena vacía (que colisionaría con todas las
      * ventas que tampoco la tienen).
      *
-     * <p>Se recorta porque un salto de espacio de más convertiría la misma
+     * Se recorta porque un salto de espacio de más convertiría la misma
      * intención de cobro en dos claves distintas, que es justo lo que la
      * idempotencia debe evitar.
      */
@@ -258,26 +258,25 @@ public class SaleImpl implements SaleService {
     }
 
     /**
-     * Usuario autenticado que está haciendo la venta (V5).
+     * Usuario autenticado que está haciendo la venta.
      *
-     * <p>Se lee del {@code SecurityContext}, que es donde Spring Security deja
+     * Se lee del {@code SecurityContext}, que es donde Spring Security deja
      * al usuario del JWT ya validado. No se pasa por parámetro ni se pide el
      * email en el body: si el cliente pudiera mandar el usuario, cualquiera que
      * tenga un token podría registrar ventas a nombre de otro.
      *
-     * <p><b>El principal es un {@code UserEntity}, no un {@code UserDetails}.</b>
+     * El principal es un {@code UserEntity}, no un {@code UserDetails}.
      * Eso lo define {@code JwtFilter}, que autentica así:
      * {@code new UsernamePasswordAuthenticationToken(user, null, autoridades)}
      * con la entidad {@code UserEntity} completa (rol y permisos incluidos). Por
-     * eso aquí se lee el principal <b>como entidad</b> y no se busca al usuario en
+     * eso aquí se lee el principal como entidad y no se busca al usuario en
      * la base: ya está cargado, y volver a consultarlo sería un SELECT
      * por venta.
      *
-     * <p>Si no hay usuario autenticado devuelve {@code null} en vez de fallar.
+     * Si no hay usuario autenticado devuelve {@code null} en vez de fallar.
      * Esto lo hace seguro para los tests de integración (que no levantan el
      * filtro de seguridad) y para una eventual llamada interna. El costo es que
-     * una venta sin usuario queda con {@code user_id} nulo, que es exactamente
-     * el mismo estado que tienen las ventas anteriores a V5.
+     * una venta sin usuario queda con {@code user_id} nulo.
      */
     private UserEntity currentUserOrNull(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -408,7 +407,7 @@ public class SaleImpl implements SaleService {
         detail.setQuantity(item.getQuantity());
         detail.setUnitPrice(product.getPrice());
 
-        //V3: se congela el COSTO del producto al momento de vender. Sin esto,
+        //Se congela el COSTO del producto al momento de vender. Sin esto,
         //la utilidad de esta venta habria que recalcularla con product.cost,
         //que es el costo del ULTIMO purchase de hoy: comprar algo mas barato
         //manana reescribia la ganancia de ayer. Mismo congelamiento que
@@ -478,7 +477,7 @@ public class SaleImpl implements SaleService {
         return mapper.toDetailResponse(sale);
     }
 
-    // ===== CICLO DE VIDA DE LA VENTA (2026-09-30) =====
+    // ===== CICLO DE VIDA DE LA VENTA =====
     /**
      * Carga la venta o lanza 404. Extraido como helper porque confirm() y
      * cancel() empiezan exactamente igual: centralizar la búsqueda evita que
@@ -519,7 +518,7 @@ public SaleHistoryResponse confirm(Long saleId){
                 "No se puede confirmar una venta que ya fue anulada", HttpStatus.CONFLICT);
         }
 
-        // ===== V3: ganar la carrera de forma atómica =====
+        // ===== Ganar la carrera de forma atómica =====
         //El UPDATE condicional y la comprobación de arriba NO son redundantes: la
         //de arriba es una regla de negocio (no se revive una venta anulada) que se
         //lee en Java, y la de abajo es la garantía de concurrencia. El
@@ -565,7 +564,7 @@ public SaleHistoryResponse confirm(Long saleId){
      *       porque el efectivo se devuelve en mano y el estado de la venta es
      *       la única fuente de verdad.
      *
-     * Ojo con la devolución: se recorre {@code sale.getDetails()} (los
+     * Devolución: se recorre {@code sale.getDetails()} (los
      * renglones ya guardados) y NO los items del request, porque en una
      * anulación no hay request: hay que deshacer exactamente lo que se hizo.
      * La cantidad a devolver es la del HISTÓRICO, no la que el cliente mande.

@@ -36,14 +36,14 @@ import com.erikjarquin.compras.service.PurchaseService;
  *
  * Cancelar ({@code cancel}): solo borra la compra, y solo si sigue
  * PENDIENTE. Como una compra pendiente nunca tocó el inventario, no hay nada
- * que revertir y el antiguo {@code Math.max(stock - qty, 0)} — que escribía un
- * 0 falso en la BD y devolvía 200 OK — ya no tiene dónde aparecer.
+ * que revertir y el antiguo {@code Math.max(stock - qty, 0)} que escribía un
+ * 0 falso en la BD y devolvía 200 OK ya no tiene dónde aparecer.
  *
  * Por qué el efecto está en confirmar y no en crear: confirmar es lo
  * que declara que la mercancía llegó de verdad al almacén. Una compra en
  * tránsito se registra sin mover el stock, y si el proveedor no la entrega se
  * borra sin dejar rastro. El estado terminal es lo que protege al inventario,
- * igual que en la venta (V2).
+ * igual que en la venta.
  *
  * El costo del producto ({@code product.cost}) lo escribe CONFIRMAR y no se
  * revierte nunca: es el último costo de compra vigente.
@@ -96,7 +96,7 @@ public class PurchaseImpl implements PurchaseService {
             detail.setQuantity(item.getQuantity());
             detail.setUnitCost(unitCost);
 
-            //V3: precio de VENTA del renglón. Se guarda AHORA (al registrar), no
+            //Precio de VENTA del renglón. Se guarda AHORA (al registrar), no
             //al confirmar, para que la compra pendiente ya muestre el precio que
             //se aplicará. Sigue sin tocar product.price: eso pasa al confirmar.
             detail.setUnitPrice(item.getUnitPrice());
@@ -105,7 +105,7 @@ public class PurchaseImpl implements PurchaseService {
 
             total = total.add(detail.getSubtotal());
 
-            //2) V3: aquí YA NO se toca el inventario.
+            //2) Aquí YA NO se toca el inventario.
             //   El stock y el costo se aplican en CONFIRMAR (confirm()), que es
             //   el acto que declara que la mercancía llegó al almacén.
             //   Registrar no es confirmar: una compra en tránsito se anota sin
@@ -157,7 +157,7 @@ public class PurchaseImpl implements PurchaseService {
      *
      * Por qué ahora es tan simple
      *
-     * Hasta V2, crear una compra ya sumaba el stock, así que cancelar tenía
+     * Crear una compra ya sumaba el stock, así que cancelar tenía
      * que deshacer esa suma y el método era la parte más delicada del
      * módulo (comprar 10 a vender 5 a cancelar) escribía un
      * {@code Math.max(stock - qty, 0)} = 0 falso con 5 unidades ya
@@ -172,7 +172,7 @@ public class PurchaseImpl implements PurchaseService {
      *
      * Una compra CONFIRMADA ya suma stock y define el costo vigente, y es
      * evidencia contable de una entrega real: se rechaza con
-     * 409 CONFLICT y no se borra, igual que una venta confirmada (V2).
+     * 409 CONFLICT y no se borra, igual que una venta confirmada.
      */
     @Override
     @Transactional
@@ -228,7 +228,7 @@ public class PurchaseImpl implements PurchaseService {
         //usuario podrían diferir en milisegundos y no coincidir con el histórico.
         java.time.LocalDateTime cuando = java.time.LocalDateTime.now();
 
-        // ===== PASO 1: ganar la carrera, de forma atómica (V3) =====
+        // ===== PASO 1: ganar la carrera, de forma atómica =====
         //
         //Este UPDATE condicional es lo que garantiza que el stock se sume UNA sola
         //vez. Devuelve 1 si esta peticion fue la que confirmo, o 0 si otra se
@@ -276,7 +276,7 @@ public class PurchaseImpl implements PurchaseService {
                 //   desde V3, la utilidad de cada venta via sale_details.unitCost.
                 product.setCost(detail.getUnitCost());
 
-                //3) PRECIO DE VENTA (V3, decisión del dueño): CONFIRMAR también
+                //3) PRECIO DE VENTA: CONFIRMAR también
                 //   actualiza product.price con lo que dice el renglón. Hasta V2
                 //   este módulo NUNCA escribía price, porque se consideraba
                 //   "decisión comercial"; el dueño aclaró el flujo real: al crear

@@ -1,27 +1,27 @@
 package com.erikjarquin.compras.model.enums;
 
 /**
- * Catálogo de permisos (36). Cada nombre se usa en entidades PermissionEntity
+ * Catálogo de permisos. Cada nombre se usa en entidades PermissionEntity
  * (columna name) y en los @PreAuthorize("hasAuthority('...')") de los
  * controllers: el string debe coincidir EXACTAMENTE con el nombre del enum.
  *
- * <p>Organizados por módulo. Al agregar/quitar un valor (3 pasos, en orden):
+ * Organizados por módulo. Al agregar/quitar un valor (3 pasos, en orden):
  *  1. Agregar el valor aquí.
- *  2. ⚠️ Actualizar el CHECK {@code permissions_name_check} en una migración
+ *  2. Actualizar el CHECK {@code permissions_name_check} en una migración
  *     Flyway nueva. Es DDL puro: ni Hibernate con {@code ddl-auto=update} ni una
  *     entidad JPA pueden ampliarlo, y sin esto el INSERT del bootstrap revienta
  *     con "violates check constraint". Ver {@code V2__venta_confirmada.sql} como
  *     ejemplo del patrón DROP + ADD.
  *  3. PermissionBootstrap lo inserta en BD en el siguiente arranque (solo añade
  *     los que faltan; nunca borra ni toca los existentes).
- *  4. Asignarlo a los roles. OJO: RolePermissionBootstrap NO es self-healing
- *     (decisión 2026-09-17): solo siembra permisos a los roles base cuando NO
+ *  4. Asignarlo a los roles. OJO: RolePermissionBootstrap NO es self-healing:
+ *     solo siembra permisos a los roles base cuando NO
  *     tienen ninguno. Si creas un permiso que ADMIN/CAJERO/ALMACENISTA deban
  *     tener y la BD ya está sembrada, asígnalo desde la pantalla de Roles
  *     (o inclúyelo en la migración Flyway, como se hizo en V2).
  *  5. Verificar que el frontend tenga la ruta/guard correspondiente si es nuevo.
  *
- * <p>NOTA: los módulos de clientes y facturas se descartaron (decisión 2026-09-17),
+ * NOTA: los módulos de clientes y facturas se descartaron,
  * por eso ya  no existen VER_CLIENTES / VER_FACTURAS. La caja sigue activa para
  * el POS (VER_CAJA, ABRIR_CAJA, CERRAR_CAJA, CORTE_CAJA).
  */

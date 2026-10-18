@@ -12,7 +12,7 @@ import com.erikjarquin.compras.model.dto.Cash.OpenCashRequest;
 /**
  * Contrato de la caja registradora.
  *
- * Modelo V4: cajas y turnos son dos cosas. Un negocio tiene pocas cajas
+ * Cajas y turnos son dos cosas. Un negocio tiene pocas cajas
  * físicas y muchos turnos, así que el modelo separa:
  * 
  * {@code cash_boxes}: las cajas FÍSICAS del local. Se registran con

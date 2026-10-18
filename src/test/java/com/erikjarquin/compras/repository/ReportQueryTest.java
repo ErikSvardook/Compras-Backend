@@ -65,23 +65,23 @@ class ReportQueryTest {
         cafe.setBarcode("2222");
         productRepository.save(cafe);
 
-        //Venta aprobada en efectivo (día 10)
+        //Venta aprobada en efectivo
         saveSale(LocalDateTime.of(2026, 9, 10, 10, 0), new BigDecimal("10.00"),
                 PaymentMethod.CASH, gaseosa, 2);
 
-        //Venta aprobada débito (día 20) — mismo producto
+        //Venta aprobada débito — mismo producto
         saveSale(LocalDateTime.of(2026, 9, 20, 10, 0), new BigDecimal("15.00"),
                 PaymentMethod.DEBIT, gaseosa, 3);
 
-        //Venta RECHAZADA en crédito (día 25) — se debe EXCLUIR de los agregados
+        //Venta RECHAZADA en crédito — se debe EXCLUIR de los agregados
         saveSale(LocalDateTime.of(2026, 9, 25, 10, 0), new BigDecimal("99.00"),
                 PaymentMethod.CREDIT, cafe, 1);
 
-        //Venta ANULADA (V3, día 28): es la que destapó el bug de V2. Anular deja
+        //Venta ANULADA: es la que destapó un bug. Anular deja
         //la fila con cancelled=true a propósito (evidencia contable) pero NO
         //cambia el paymentStatus, que sigue APPROVED. Si los agregados solo
-        //filtraran por APPROVED, esta venta de 500.00 seguiría sumando ingresos
-        //(y desde V3, costo). Todos los tests de este archivo siguen esperando
+        //filtraran por APPROVED, esta venta de 500.00 seguiría sumando ingresos.
+        //Todos los tests de este archivo siguen esperando
         //2 ventas y 25.00 en total, así que son también regresión de eso.
         saveSale(LocalDateTime.of(2026, 9, 28, 10, 0), new BigDecimal("500.00"),
                 PaymentMethod.CASH, cafe, 1, true);
@@ -93,10 +93,10 @@ class ReportQueryTest {
     }
 
     /**
-     * @param unitCost costo congelado del producto al vender (V3). Si viene
+     * @param unitCost costo congelado del producto al vender. Si viene
      *                null se deja NULL a propósito: simula un renglón sin costo
      *                conocido.
-     * @param cancelled la venta fue anulada (V2). No cambia el paymentStatus.
+     * @param cancelled la venta fue anulada. No cambia el paymentStatus.
      */
     private void saveSale(LocalDateTime date, BigDecimal total, PaymentMethod method,
                           ProductEntity product, int quantity, boolean cancelled){
@@ -230,9 +230,9 @@ class ReportQueryTest {
     }
 
     /**
-     * REGRESIÓN del bug de V3: una venta ANULADA (cancelled=true) NO cuenta.
+     * Una venta ANULADA (cancelled=true) NO cuenta.
      *
-     * <p>El seed incluye una venta anulada de 500.00 con paymentStatus APPROVED.
+     * El seed incluye una venta anulada de 500.00 con paymentStatus APPROVED.
      * Si el filtro {@code cancelled = false} desapareciera de cualquier consulta,
      * el total saltaría de 25.00 a 525.00 y los tests de arriba fallarían.
      */
@@ -257,7 +257,7 @@ class ReportQueryTest {
     }
 
     // =========================================================================
-    //  COSTO DE LO VENDIDO (V3) — la base de la utilidad
+    //  COSTO DE LO VENDIDO — la base de la utilidad
     // =========================================================================
 
     /**

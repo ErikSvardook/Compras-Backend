@@ -32,7 +32,7 @@ import com.erikjarquin.compras.service.AuthService;
 /**
  * Tests del controlador de autenticación.
  *
- * <p>A diferencia del resto, {@code /api/local/auth/**} es PÚBLICO en SecurityConfig
+ * A diferencia del resto, {@code /api/local/auth/**} es PÚBLICO en SecurityConfig
  * (permitAll): login/forgot/reset funcionan SIN token. El único endpoint que
  * necesita sesión es change-password (usa el principal del contexto).
  */

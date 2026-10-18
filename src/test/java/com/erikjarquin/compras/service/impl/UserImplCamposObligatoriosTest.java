@@ -30,20 +30,20 @@ import com.erikjarquin.compras.repository.RoleRepository;
 import com.erikjarquin.compras.repository.UserRepository;
 
 /**
- * Tests de campos OBLIGATORIOS en el alta y la edición de usuarios (V7).
+ * Tests de campos OBLIGATORIOS en el alta y la edición de usuarios.
  *
- * <p>El motivo de que este archivo exista es un caso que sonaba improbable y no
- * lo era: <b>un usuario con la contraseña en blanco se guardaba</b>.
+ * El motivo de que este archivo exista es un caso que sonaba improbable y no
+ * lo era: un usuario con la contraseña en blanco se guardaba.
  * {@code BCryptPasswordEncoder} hashea la cadena vacía sin quejarse, así que la
  * cuenta quedaba creada y con fila en la base. El problema aparecía después, al
  * entrar: {@code matches} devuelve {@code false} ante una cadena vacía, siempre,
  * así que esa persona quedaba bloqueada para siempre y sin explicación.
  *
- * <p>Y el caso hermano: un nombre o correo vacíos no los frenaba el código, solo
+ * Y el caso hermano: un nombre o correo vacíos no los frenaba el código, solo
  * el {@code NOT NULL} de la base, que respondía con un 409 diciendo "el dato ya
  * existe". El mensaje describía un problema que no era el que había.
  *
- * <p>Todos estos tests terminan en {@code IllegalArgumentException}, que
+ * Todos estos tests terminan en {@code IllegalArgumentException}, que
  * {@code GlobalExceptionHandler} traduce a 400: eso es lo que el usuario ve.
  */
 @ExtendWith(MockitoExtension.class)
@@ -94,7 +94,7 @@ class UserImplCamposObligatoriosTest {
         @Test
         @DisplayName("nombre con solo espacios: 400 (el caso que != null no atrapa)")
         void nombreSoloEspacios(){
-            // 🔑 Este es el caso que un `if (nombre == null)` deja pasar: el
+            // Este es el caso que un `if (nombre == null)` deja pasar: el
             // formulario manda "   " cuando el usuario deja el campo en blanco.
             assertThatThrownBy(() -> service.createUser(create("   ", "ana@x.com", "clave1234")))
                     .isInstanceOf(IllegalArgumentException.class)

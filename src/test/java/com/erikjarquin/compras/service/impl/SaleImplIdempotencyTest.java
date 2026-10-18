@@ -34,21 +34,21 @@ import com.erikjarquin.compras.repository.UserRepository;
 import com.erikjarquin.compras.service.PaymentService;
 
 /**
- * Tests de IDEMPOTENCIA del cobro (V6).
+ * Tests de IDEMPOTENCIA del cobro.
  *
- * <p><b>El bug que motivó esto.</b> El modal de confirmar venta es un
+ * El bug que motivó esto. El modal de confirmar venta es un
  * {@code <form>}. El cajero paga y aprieta Enter; si lo aprieta dos veces, el
  * frontend lanza dos peticiones a {@code POST /sales} y se hacen DOS ventas: el
  * stock se descuenta dos veces y el reporte muestra dos tickets por una sola
  * compra.
  *
- * <p>Un boton deshabilitado en el frontend NO lo arregla, y esa es la parte que
- * costó entender: el boton evita el segundo <em>clic</em>, pero no el caso real,
+ * Un boton deshabilitado en el frontend NO lo arregla, y esa es la parte que
+ * costó entender: el boton evita el segundo clic, pero no el caso real,
  * que es que las dos peticiones ya estén viajando por la red al mismo tiempo.
  * La unica proteccion que funciona de verdad es una clave de idempotencia que
  * viaja con la intencion de cobro y se comprueba en el servidor.
  *
- * <p>Estos tests fijan ese comportamiento en el backend, que es donde se
+ * Estos tests fijan ese comportamiento en el backend, que es donde se
  * resuelve. El flag del frontend ({@code isProcessing}) es la primera barrera y
  * se documenta en el codigo, pero no es lo que garantiza que no se cobre dos
  * veces.

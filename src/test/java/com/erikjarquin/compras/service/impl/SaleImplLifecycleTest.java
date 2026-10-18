@@ -36,24 +36,22 @@ import com.erikjarquin.compras.service.PaymentService;
 /**
  * Tests del CICLO DE VIDA de la venta en {@code SaleImpl} (Mockito, sin BD).
  *
- * <h3>Por qué estos tests son la mitad del arreglo</h3>
+ * Por qué estos tests son la mitad del arreglo
  *
- * <p>El síntoma que reportó el usuario fue: "compré 10, vendí 5, y al cancelar
+ * El síntoma que reportó el usuario fue: "compré 10, vendí 5, y al cancelar
  * la compra el stock volvió a 0". Ese dato corrupto no lo producía solo
  * {@code PurchaseImpl.cancel}: cualquiera que devuelva stock sin validar puede
  * dejar el inventario incoherentente. Estos tests fijan la regla del lado de la
  * venta, que es la que hace el inventario coherente:
  *
- * <ul>
- *   <li>Una venta confirmada NO se anula nunca (es el congelamiento).</li>
- *   <li>Una venta anulada no se anula dos veces (el stock no sube doble).</li>
- *   <li>Una venta con tarjeta no se anula desde aquí (el dinero está
- *       capturado: necesita reversa real).</li>
- *   <li>Confirmar es IDEMPOTENTE: reintentar tras un corte de red no falla.</li>
- *   <li>Una venta anulada no se "revive" confirmándola.</li>
- * </ul>
+ *   Una venta confirmada NO se anula nunca (es el congelamiento).
+ *   Una venta anulada no se anula dos veces (el stock no sube doble).
+ *   Una venta con tarjeta no se anula desde aquí (el dinero está
+ *       capturado: necesita reversa real).
+ *   Confirmar es IDEMPOTENTE: reintentar tras un corte de red no falla.
+ *   Una venta anulada no se "revive" confirmándola.
  *
- * <p><b>Por qué el mapper real y no un mock:</b> {@code SaleImpl} necesita el
+ * Por qué el mapper real y no un mock: {@code SaleImpl} necesita el
  * mapper para devolver DTOs, y aquí se usa el {@code SaleMapper} de verdad
  * (es un bean sin dependencias). Es a propósito: si el mapper se olvidara de
  * copiar {@code confirmed}, estos tests lo detectarían, porque el
@@ -61,11 +59,11 @@ import com.erikjarquin.compras.service.PaymentService;
  * un mapper mockeado, ese error pasaría desapercibido hasta que la UI no
  * refrescara el botón.
  *
- * <p><b>Por qué {@code productRepository.save()} nunca se verifica en el camino
- * de éxito de {@code cancel()}:</b> porque el mapper y el producto son
+ * Por qué {@code productRepository.save()} nunca se verifica en el camino
+ * de éxito de {@code cancel()}: porque el mapper y el producto son
  * mutables en memoria, la aserción útil es directamente sobre
  * {@code producto.getStock()}. Mockito {@code verify} se usa en cambio para
- * comprobar las <b>NO escrituras</b>, que es donde está el peligro.
+ * comprobar las NO escrituras, que es donde está el peligro.
  */
 @ExtendWith(MockitoExtension.class)
 class SaleImplLifecycleTest {
@@ -88,14 +86,14 @@ class SaleImplLifecycleTest {
     /**
      * Mapper real, envuelto en {@code @Spy}.
      *
-     * <p>El {@code @Spy} NO es decorativo: {@code SaleImpl} se construye por
+     * El {@code @Spy} NO es decorativo: {@code SaleImpl} se construye por
      * constructor y recibe el mapper por ahí. Si este campo fuera una simple
      * instancia sin {@code @Spy}, Mockito no la registraría como test double y
      * le inyectaría {@code null} al servicio, revolviendo con
      * {@code NullPointerException} dentro de {@code cancel()}. Al declararlo
      * {@code @Spy}, Mockito lo ve, lo registra con su tipo y lo inyecta.
      *
-     * <p>Además, usar el mapper de verdad (y no uno mockeado que devuelve
+     * Además, usar el mapper de verdad (y no uno mockeado que devuelve
      * {@code null}) es lo que hace que {@code assertThat(resultado.isConfirmed())}
      * sea una comprobación real: si mañana el mapper se olvidara de copiar
      * {@code confirmed}, el DTO devolvería {@code false} y el test fallaría. Con
@@ -167,9 +165,9 @@ void confirmar_marcaConfirmadaYPonFecha(){
 }
 
    /**
-    * Carrera entre dos confirmaciones simultáneas (V3).
+    * Carrera entre dos confirmaciones simultáneas.
     *
-    * <p>La segunda petición ejecuta su UPDATE y obtiene 0 filas porque la primera
+    * La segunda petición ejecuta su UPDATE y obtiene 0 filas porque la primera
     * ya confirmó. Debe devolver 200 con la venta confirmada (idempotencia) y NO
     * escribir nada, aunque su copia en memoria diga que sigue abierta.
     */
@@ -188,7 +186,7 @@ void confirmar_marcaConfirmadaYPonFecha(){
      * Idempotencia: el usuario Confirmar dos veces porque el primero no le llegó
      * la respuesta. Debe devolver 200 y NO pisar la fecha original.
      *
-     * <p>Si se reescribiera la fecha, el historial mostraría el último reintento
+     * Si se reescribiera la fecha, el historial mostraría el último reintento
      * como si fuera la hora real de la confirmación, y eso ya es pérdida de
      * información de auditoría.
      */
@@ -249,7 +247,7 @@ void confirmar_marcaConfirmadaYPonFecha(){
     /**
      * Caso feliz: se devuelve exactamente la cantidad vendida en cada renglón.
      *
-     * <p>Se usa la cantidad del HISTÓRICO ({@code detail.getQuantity()}), no la
+     * Se usa la cantidad del HISTÓRICO ({@code detail.getQuantity()}), no la
      * del request: en una anulación no hay request. Este es el test que
      * documenta que "deshacer" significa deshacer exactamente lo que se hizo.
      */
@@ -282,8 +280,8 @@ void confirmar_marcaConfirmadaYPonFecha(){
     /**
      * EL CASO CENTRAL: una venta confirmada ya no se puede anular.
      *
-     * <p>Esta es la regla que cierra el agujero del bug reportado. Con ella, el
-     * recorrido "vender 5 → cancelar la compra que los trajo" queda cortado en el
+     * Esta es la regla que cierra el agujero del bug reportado. Con ella, el
+     * recorrido "vender 5 -> cancelar la compra que los trajo" queda cortado en el
      * primer paso, porque la venta de esas 5 unidades se confirma al salir el
      * pedido y desde ahí es intocable.
      */
@@ -307,7 +305,7 @@ void confirmar_marcaConfirmadaYPonFecha(){
     }
 
     /**
-     * Anular dos veces SUBIRÍA el stock dos veces: 8 → 11 → 14 por la misma
+     * Anular dos veces SUBIRÍA el stock dos veces: 8 -> 11 -> 14 por la misma
      * unidad vendida. Por eso es 409 y no un "no-op" silencioso.
      */
     @Test
@@ -331,7 +329,7 @@ void confirmar_marcaConfirmadaYPonFecha(){
     /**
      * Venta con tarjeta: NO se anula, porque el dinero ya está capturado.
      *
-     * <p>Anular aquí solo mentiría el historial; el dinero hay que devolverlo con
+     * Anular aquí solo mentiría el historial; el dinero hay que devolverlo con
      * la reversa real del módulo de pagos. Es además una separación de
      * responsabilidades: el estado de la venta y el del pago son ejes distintos.
      */
@@ -356,7 +354,7 @@ void confirmar_marcaConfirmadaYPonFecha(){
     /**
      * Venta sin renglones: se anula igual (marca el estado) y no rompe.
      *
-     * <p>Cubre el {@code if (sale.getDetails() != null)}: una venta legacy sin
+     * Cubre el {@code if (sale.getDetails() != null)}: una venta legacy sin
      * detalles no debe reventar con NPE al anularla.
      */
     @Test

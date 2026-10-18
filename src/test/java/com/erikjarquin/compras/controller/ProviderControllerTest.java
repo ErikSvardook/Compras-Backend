@@ -35,7 +35,7 @@ import com.erikjarquin.compras.service.ProviderService;
 /**
  * Tests del controlador de proveedores.
  *
- * <p>Verifica el CRUD y las reglas de negocio clave: RFC duplicado → 409 y
+ * Verifica el CRUD y las reglas de negocio clave: RFC duplicado -> 409 y
  * proveedor con compras asociadas → 409 (no se puede borrar).
  */
 @WebMvcTest(ProviderController.class)

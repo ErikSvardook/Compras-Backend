@@ -37,7 +37,7 @@ import com.erikjarquin.compras.service.UserService;
 /**
  * Tests del controlador de usuarios.
  *
- * <p>Verifica el CRUD, los endpoints PATCH/DELETE de activación-desactivación y
+ * Verifica el CRUD, los endpoints PATCH/DELETE de activación-desactivación y
  * que cada acción respete su permiso específico (p. ej. DESACTIVAR_USUARIOS).
  */
 @WebMvcTest(UserController.class)
@@ -138,7 +138,7 @@ class UserControllerTest {
     @Test
     @WithMockUser(authorities = "VER_USUARIOS")
     void desactivarUsuario_sinPermisoEspecifico_devuelve403() throws Exception {
-        // Tiene VER_USUARIOS pero no DESACTIVAR_USUARIOS → método bloqueado.
+        // Tiene VER_USUARIOS pero no DESACTIVAR_USUARIOS -> método bloqueado.
         mockMvc.perform(delete("/api/local/users/1"))
                 .andExpect(status().isForbidden());
 

@@ -39,7 +39,7 @@ spring:
       data-source-properties:
         preparedStatementCacheQueries: 0
 
-    # Host, puerto y nombre de BD NO son secretos → tienen default LOCAL. Usuario
+    # Host, puerto y nombre de BD NO son secretos -> tienen default LOCAL. Usuario
     # y clave vienen de ${DB_USER} / ${DB_PASSWORD} (en application-local.yaml o
     # en las variables de entorno de Railway/Supabase).
     #
@@ -92,7 +92,7 @@ spring:
 app:
   # URL del frontend (Angular). Se usa en los emails de recuperación de contraseña.
   #   Local      : http://localhost:4200
-  #   Netlify    : https://tu-app.netlify.app   → via FRONTEND_URL
+  #   Netlify    : https://tu-app.netlify.app   -> via FRONTEND_URL
   frontend-url: ${FRONTEND_URL:http://localhost:4200}
 
   mail:
@@ -110,13 +110,13 @@ app:
   # Carpeta física donde se guardan las imágenes de productos.
   #   Local   : ./uploads (default)
   #   Railway : via UPLOAD_DIR apuntando al VOLUMEN persistente montado, p. ej.
-  #             /app/uploads → navega a Railway → Project → el servicio →
-  #             Volumes tab → crea un volumen con monte en /app/uploads, y
+  #             /app/uploads -> navega a Railway -> Project -> el servicio ->
+  #             Volumes tab -> crea un volumen con monte en /app/uploads, y
   #             define UPLOAD_DIR=/app/uploads e UPLOAD_URL=https://<tu-app>.
   upload-dir: ${UPLOAD_DIR:./uploads}
   # URL BASE pública con la que el frontend construye las rutas de imágenes:
   #   Local   : http://localhost:8081/api/uploads
-  #   Railway : https://tu-backend.up.railway.app/api/uploads  → via UPLOAD_URL
+  #   Railway : https://tu-backend.up.railway.app/api/uploads  -> via UPLOAD_URL
   upload-url: ${UPLOAD_URL:http://localhost:8081/api/uploads}
 
 server:

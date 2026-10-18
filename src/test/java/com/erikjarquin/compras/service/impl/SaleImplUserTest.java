@@ -34,25 +34,23 @@ import com.erikjarquin.compras.repository.SaleRepository;
 import com.erikjarquin.compras.repository.UserRepository;
 
 /**
- * Tests de QUIÉN queda como dueño de una venta (V5).
+ * Tests de QUIÉN queda como dueño de una venta.
  *
- * <p><b>Este archivo existe por un bug real.</b> La primera versión de
+ * Este archivo existe por un bug real. La primera versión de
  * {@code currentUserOrNull()} hacía:
  *
- * <pre>
  *   if(!(auth.getPrincipal() instanceof UserDetails details)){
  *       return null;
  *   }
- * </pre>
  *
- * <p>Suena correcto, pero en ESTA API el principal no es un
+ * Suena correcto, pero en ESTA API el principal no es un
  * {@code UserDetails}: {@code JwtFilter} autentica con
  * {@code new UsernamePasswordAuthenticationToken(userEntity, null, autoridades)},
  * o sea que el principal es un {@code UserEntity}. Como
  * {@code UserEntity} no implementa {@code UserDetails}, el {@code instanceof}
- * NUNCA era cierto y <b>todas las ventas se guardaban sin usuario</b>.
+ * NUNCA era cierto y todas las ventas se guardaban sin usuario.
  *
- * <p>Y no daba ningún error: el código era válido, compilaba, y la columna
+ * Y no daba ningún error: el código era válido, compilaba, y la columna
  * {@code user_id} aceptaba {@code NULL} sin problema. El síntoma era solo
  * "Sin usuario" en el reporte. Estos tests existen para que ese descuido no
  * vuelva a colarse: son los que fallarían si alguien "simplifica" el método.
@@ -98,7 +96,7 @@ class SaleImplUserTest {
      * Autentica EXACTAMENTE como lo hace {@code JwtFilter}: el principal es la
      * entidad, no un {@code UserDetails}.
      *
-     * <p>Si este helper usara {@code UserDetails}, el test pasaría por la rama
+     * Si este helper usara {@code UserDetails}, el test pasaría por la rama
      * del respaldo y no detectaría el bug del {@code instanceof} equivocado. Por
      * eso replica el constructor real del token.
      */
@@ -129,7 +127,7 @@ class SaleImplUserTest {
     /**
      * Venta mínima válida: un producto en efectivo.
      *
-     * <p>Se paga en efectivo a propósito: el camino de tarjeta delega en
+     * Se paga en efectivo a propósito: el camino de tarjeta delega en
      * {@code PaymentService} y necesita un {@code CardPaymentRequest} completo,
      * que no es lo que se quiere probar acá.
      */

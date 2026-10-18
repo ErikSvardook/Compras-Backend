@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * Validaciones de entrada compartidas por los módulos de productos, proveedores y
- * compras (V3, 2026-09-30).
+ * compras.
  *
  * Por qué una clase aparte y no repetir el código en cada servicio. Las
  * reglas nacieron de errores reales de captura ("1.875" en un stock, letras en un
@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
  * las reglas mira primero la cadena, y solo después convierte.
  *
  * Los errores se lanzan como {@link IllegalArgumentException}, que
- * {@code GlobalExceptionHandler} traduce a <b>400</b>. Es el mismo patrón que ya
+ * {@code GlobalExceptionHandler} traduce a 400. Es el mismo patrón que ya
  * usaba {@code PurchaseImpl.validateRequest}, y se prefirió aBean Validation
- * porque los mensajes pueden explicar <i>por qué</i> ("el stock no admite
+ * porque los mensajes pueden explicar por qué ("el stock no admite
  * decimales: no existe 1.6 de jabón") en vez de un "validation failed" genérico.
  */
 public final class InputValidator {
@@ -96,20 +96,18 @@ public final class InputValidator {
     }
 
     /**
-     * Valida el SKU. <b>Obligatorio</b> (V7, 2026-10-04).
+     * Valida el SKU. Obligatorio.
      *
-     * <p><b>Cambia una decisión anterior.</b> El 2026-09-28 el SKU era
-     * <i>opcional</i>: si venía vacío devolvía {@code null} y la columna lo
+     * Cambia una decisión anterior. El SKU era
+     * opcional: si venía vacío devolvía {@code null} y la columna lo
      * admitía. Se cambió a obligatorio por dos razones:
      *
-     * <ol>
-     *   <li>Un producto sin SKU no se puede localizar ni integrar. El SKU es la
+     *   Un producto sin SKU no se puede localizar ni integrar. El SKU es la
      *       clave con la que el negocio habla del producto; si falta, el
-     *       inventario tiene un agujero.</li>
-     *   <li>En PostgreSQL un {@code UNIQUE} admite <b>varios NULL</b>: con el
+     *       inventario tiene un agujero.
+     *   En PostgreSQL un {@code UNIQUE} admite varios NULL: con el
      *       SKU opcional se acumulaban productos sin SKU sin que nada lo
-     *       indicara, y un producto nuevo heredaba esa ambigüedad.</li>
-     * </ol>
+     *       indicara, y un producto nuevo heredaba esa ambigüedad.
      *
      * @throws IllegalArgumentException si viene vacío, si trae caracteres no
      *                                  permitidos o si excede
@@ -161,16 +159,15 @@ public final class InputValidator {
     }
 
     /**
-     * Valida el código de barras. <b>Obligatorio</b> (V7, 2026-10-04).
+     * Valida el código de barras. Obligatorio.
      *
-     * <p>Cambia la decisión del 2026-09-28, cuando era opcional. El motivo es
-     * operativo: en el POS el producto se cobra escaneando su código, así que un
+     * Opcional. El motivo es operativo: en el POS el producto se cobra escaneando su código, así que un
      * producto sin código es un producto que el cajero no puede cobrar sin
      * buscarlo a mano. Y como en el SKU, un {@code UNIQUE} admite varios NULL,
      * de modo que "sin código" se acumulaba en silencio.
      *
-     * <p>Solo dígitos, máximo {@link #MAX_BARCODE_LENGTH}, y se guarda como
-     * <b>texto</b>: es un identificador, y por eso no se convierte a número
+     * Solo dígitos, máximo {@link #MAX_BARCODE_LENGTH}, y se guarda como
+     * texto: es un identificador, y por eso no se convierte a número
      * (perdería los ceros a la izquierda y rompería el lector).
      *
      * @throws IllegalArgumentException si viene vacío, si trae letras o si
@@ -259,7 +256,7 @@ public final class InputValidator {
      *
      * El límite de 2 decimales no es un capricho: la columna es
      * {@code numeric(38,2)} en PostgreSQL, así que "1.875" se guardaría
-     * redondeado a 1.88 <b>en silencio. El usuario escribiría 1.875, el
+     * redondeado a 1.88 en silencio. El usuario escribiría 1.875, el
      * sistema cobraría 1.88 y nadie vería el redondeo. Rechazarlo es más honesto.
      *
      * Y se rechazan los ceros a la izquierda ("000.2"), porque un usuario que
@@ -346,7 +343,7 @@ public final class InputValidator {
      * Texto libre con límite, sin saltos de línea.
      * Para nombre de categoría y de rol: un "Bebidas\nRicas" descoloca la fila
      *
-     * <p><b>OJO: este NO exige que el texto exista.</b> Si viene vacío devuelve
+     * Este NO exige que el texto exista. Si viene vacío devuelve
      * {@code null}, y quien lo use TIENE que comprobarlo aparte. Es la razón de
      * que existiera {@link #requerido}: tres servicios (categoría, rol y
      * proveedor) acaban de escribir su propio {@code if (x == null) throw}, y
@@ -369,7 +366,7 @@ public final class InputValidator {
    }
 
     // =========================================================================
-    // Obligatoriedad (V7, 2026-10-04)
+    // Obligatoriedad
     //
     //  Los métodos de arriba validan el FORMATO de algo que ya existe. Faltaba
     //  el que responde "¿viene algo?". Sin él, cada servicio se inventaba su
@@ -381,16 +378,16 @@ public final class InputValidator {
     /**
      * Exige que el campo venga con contenido y lo devuelve recortado.
      *
-     * <p>Un "campo obligatorio" que se cumple solo con {@code != null} no sirve:
+     * Un "campo obligatorio" que se cumple solo con {@code != null} no sirve:
      * el formulario manda {@code ""} o cinco espacios cuando el usuario lo
-     * dejó en blanco, y eso <b>pasa</b> el chequeo. Por eso la comparación es
+     * dejó en blanco, y eso pasa el chequeo. Por eso la comparación es
      * contra {@code isBlank()}, que cubre las tres formas de "vacío".
      *
-     * <p>El mensaje dice QUÉ campo está mal y no "validation failed", que es la
+     * El mensaje dice QUÉ campo está mal y no "validation failed", que es la
      * razón de que esta clase exista en vez de anotaciones de Bean Validation
      * (ver el comentario de la cabecera de la clase).
      *
-     * <p>Para campos <b>femeninos</b> usa {@link #requerida}, que dice "La
+     * Para campos femeninos usa {@link #requerida}, que dice "La
      * contraseña es obligatoria" en vez de "El contraseña es obligatorio".
      *
      * @param valor  lo que viene del cliente
@@ -407,7 +404,7 @@ public final class InputValidator {
     /**
      * Igual que {@link #requerido}, pero para campos femeninos.
      *
-     * <p>Existe como método aparte y no como un parámetro {@code boolean} porque
+     * Existe como método aparte y no como un parámetro {@code boolean} porque
      * en la llamada {@link #requerida}(p, "contraseña") se lee solo, mientras
      * que {@code requerido(p, "contraseña", true)} deja adivinar qué significa
      * ese {@code true}. El mensaje es lo que ve el usuario final, y "La
@@ -432,17 +429,17 @@ public final class InputValidator {
     /**
      * Exige que la contraseña venga y tenga una longitud mínima.
      *
-     * <p><b>Por qué esto importa más de lo que parece.</b> Sin este método, una
-     * contraseña vacía <b>sí se guardaba</b>: {@code BCryptPasswordEncoder}
+     * Por qué esto importa más de lo que parece. Sin este método, una
+     * contraseña vacía sí se guardaba: {@code BCryptPasswordEncoder}
      * hashea la cadena vacía sin quejarse, así que el usuario quedaba creado y
      * con una fila en la base de datos. El problema aparecía después, al
      * iniciar sesión: {@code matches} devuelve {@code false} ante una contraseña
-     * vacía, siempre, así que esa persona quedaba <b>bloqueada para siempre</b>
+     * vacía, siempre, así que esa persona quedaba bloqueada para siempre
      * sin que nadie supiera por qué. Un dato basura en la base y un soporte que
      * no tiene explicación.
      *
-     * <p>La longitud mínima es de 8 porque es la que ya exigen los formularios
-     * del frontend (login, reset y perfil). 🔑 Si algún día se cambia ahí, hay que
+     * La longitud mínima es de 8 porque es la que ya exigen los formularios
+     * del frontend (login, reset y perfil). Si algún día se cambia ahí, hay que
      * cambiarla aquí también: el backend es el que de verdad protege el dato, y
      * si estas dos reglas se separan alguien siempre se olvida de una.
      *

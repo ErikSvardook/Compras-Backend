@@ -37,7 +37,7 @@ import com.erikjarquin.compras.service.PurchaseService;
 /**
  * Tests del controlador de compras.
  *
- * <p>Verifica el CRUD (listado, detalle, alta 201, cancelación 204) y las reglas
+ * Verifica el CRUD (listado, detalle, alta 201, cancelación 204) y las reglas
  * de negocio que el frontend muestra como mensajes claros: items vacíos → 400,
  * compra no encontrada → 404.
  */
@@ -160,7 +160,7 @@ class PurchaseControllerTest {
     }
 
     // =========================================================================
-    //  CONFIRMAR (V3): PATCH /{id}/confirm
+    //  CONFIRMAR: PATCH /{id}/confirm
     // =========================================================================
 
     @Test

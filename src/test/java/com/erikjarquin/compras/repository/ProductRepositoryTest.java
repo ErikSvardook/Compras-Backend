@@ -17,7 +17,7 @@ import com.erikjarquin.compras.model.entity.ProductEntity;
 /**
  * Tests del repositorio de productos sobre H2 en memoria (no requiere Postgres).
  *
- * <p>Cubre las consultas usadas por el modulo de ventas: barcode, filtro por
+ * Cubre las consultas usadas por el modulo de ventas: barcode, filtro por
  * categoria y el buscador {q} (busqueda insensible a mayusculas sobre
  * nombre/sku/barcode utilizado por GET /api/local/products/search).
  */

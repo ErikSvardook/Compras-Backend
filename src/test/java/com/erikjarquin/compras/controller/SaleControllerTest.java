@@ -39,22 +39,20 @@ import com.erikjarquin.compras.service.SaleService;
 /**
  * Tests del controlador de ventas.
  *
- * <p>Verifica el POST de venta (200), el historial GET (lista y detalle) y que
+ * Verifica el POST de venta (200), el historial GET (lista y detalle) y que
  * un error de negocio del servicio (SaleException) se traduzca al código HTTP
  * con el formato uniforme ({@code SALE_ERROR}).
  *
- * <p><b>Sobre los códigos de error (2026-09-30):</b> hasta entonces todo
+ * Sobre los códigos de error (2026-09-30): hasta entonces todo
  * {@code SaleException} se traducía a 400. Ahora la excepción trae su propio
  * {@code HttpStatus}, y estos tests fijan esa traducción:
- * <ul>
- *   <li>400: la venta no se puede procesar tal cual (stock insuficiente, caja
- *       cerrada) → {@code new SaleException(msg)}.</li>
- *   <li>404: la venta no existe.</li>
- *   <li>409: la venta existe pero su estado choca con la operación (anular una
- *       confirmada, anular dos veces, anular con tarjeta).</li>
- * </ul>
+ *   400: la venta no se puede procesar tal cual (stock insuficiente, caja
+ *       cerrada) → {@code new SaleException(msg)}.
+ *   404: la venta no existe.
+ *   409: la venta existe pero su estado choca con la operación (anular una
+ *       confirmada, anular dos veces, anular con tarjeta).
  *
- * <p>La distinción 400/404/409 importa porque es lo que le permite al frontend
+ * La distinción 400/404/409 importa porque es lo que le permite al frontend
  * decidir si mostrar "reintentá", "no existe" o "esa operación no se puede
  * hacer": son tres pantallas distintas, no un único "algo falló".
  */
@@ -104,7 +102,7 @@ class SaleControllerTest {
     @Test
     @WithMockUser(authorities = "CREAR_VENTAS")
     void registrarVenta_sinStock_devuelve400() throws Exception {
-        // Regla de negocio (stock insuficiente) → SaleException → 400 SALE_ERROR.
+        // Regla de negocio (stock insuficiente) -> SaleException -> 400 SALE_ERROR.
         when(saleService.processSale(any()))
                 .thenThrow(new SaleException("Stock insuficiente para el producto Café"));
 
@@ -278,7 +276,7 @@ class SaleControllerTest {
     /**
      * Un cajero con CREAR_VENTAS NO puede confirmar ni anular.
      *
-     * <p>Es el motivo de haber creado CONFIRMAR_VENTAS y CANCELAR_VENTAS como
+     * Es el motivo de haber creado CONFIRMAR_VENTAS y CANCELAR_VENTAS como
      * permisos separados en lugar de reutilizar CREAR_VENTAS: cobrar y cerrar la
      * venta son responsabilidades distintas.
      */

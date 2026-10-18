@@ -16,7 +16,7 @@ import org.springframework.mock.web.MockMultipartFile;
  * Tests de FileStorageService (validacion de imagenes) con un directorio
  * temporal real; no requiere Spring ni base de datos.
  *
- * <p>Puntos criticos probados: rechazo por extension, rechazo por contenido
+ * Puntos criticos probados: rechazo por extension, rechazo por contenido
  * (magic bytes: un ejecutable renombrado a .png no debe pasar), rechazo por
  * tamano y guardado/eliminacion reales en disco.
  */

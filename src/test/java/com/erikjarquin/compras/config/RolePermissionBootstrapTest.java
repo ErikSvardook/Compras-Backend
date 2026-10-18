@@ -25,8 +25,7 @@ import com.erikjarquin.compras.repository.PermissionRepository;
 import com.erikjarquin.compras.repository.RoleRepository;
 
 /**
- * Tests de {@link RolePermissionBootstrap}: la regla clave después del cambio
- * 2026-09-17 — el seed de permisos solo ocurre cuando los roles base NO tienen
+ * Tests de {@link RolePermissionBootstrap}: la regla clave; el seed de permisos solo ocurre cuando los roles base NO tienen
  * ningún permiso (arranque inicial). Si ya hay asignaciones se respeta la
  * gestión manual y los roles borrados a mano NO vuelven a aparecer.
  */

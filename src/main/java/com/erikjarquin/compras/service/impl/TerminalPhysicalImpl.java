@@ -31,9 +31,9 @@ import lombok.extern.slf4j.Slf4j;
  *
  * Se activa solo si {@code payment.terminal.type=PHYSICAL}
  * (@ConditionalOnProperty). Protocolo de mensajes por líneas de texto:
- *  - PAY|merchant|terminal|monto|método|transactionId  → cobro
- *  - REV|merchant|terminal|transactionId                → reversa
- *  - STS|merchant|terminal|transactionId                → consulta de estado
+ *  - PAY|merchant|terminal|monto|método|transactionId  -> cobro
+ *  - REV|merchant|terminal|transactionId                -> reversa
+ *  - STS|merchant|terminal|transactionId                -> consulta de estado
  *
  * Todo el tráfico pasa por {@link #sendRaw(String)}, que abre el socket,
  * respeta el timeout configurado y devuelve la línea de respuesta.

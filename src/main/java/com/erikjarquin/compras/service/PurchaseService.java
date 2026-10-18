@@ -10,7 +10,7 @@ import com.erikjarquin.compras.model.dto.Purchases.PurchaseRequest;
  * Ver {@code service/impl/PurchaseImpl}.
  */
 public interface PurchaseService {
-    //Registrar una compra. Nace PENDIENTE: no suma stock ni cambia costo (V3)
+    //Registrar una compra. Nace PENDIENTE: no suma stock ni cambia costo
     PurchaseDTO create(PurchaseRequest request);
 
     //Listado completo de compras (más recientes primero)

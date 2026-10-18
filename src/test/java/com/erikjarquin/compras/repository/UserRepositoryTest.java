@@ -19,7 +19,7 @@ import com.erikjarquin.compras.model.enums.PermissionName;
 /**
  * Tests del repositorio de usuarios sobre H2 en memoria (no requiere Postgres).
  *
- * <p>Verifica las dos consultas de login: findByEmail y
+ * Verifica las dos consultas de login: findByEmail y
  * findByEmailWithRoleAndPermissions (el JOIN FETCH que evita N+1 y carga
  * rol + permisos en una sola consulta para construir la autorizacion).
  */

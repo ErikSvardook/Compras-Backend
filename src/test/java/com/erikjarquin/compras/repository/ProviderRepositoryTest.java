@@ -19,7 +19,7 @@ import com.erikjarquin.compras.model.entity.PurchaseEntity;
 /**
  * Tests de los repositorios del m\u00f3dulo de COMPRAS sobre H2 en memoria.
  *
- * <p>Cubre lo que usa el servicio: RFC \u00fanico (findByRfc), listado
+ * Cubre lo que usa el servicio: RFC \u00fanico (findByRfc), listado
  * alfab\u00e9tico de proveedores, compras por proveedor con detalles precargados
  * (@EntityGraph) y el conteo que bloquea borrar un proveedor con compras (409).
  */

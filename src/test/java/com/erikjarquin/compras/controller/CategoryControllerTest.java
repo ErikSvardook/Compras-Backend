@@ -37,7 +37,7 @@ import com.erikjarquin.compras.service.CategoryService;
 /**
  * Tests del controlador de categorías (@WebMvcTest + MockMvc).
  *
- * <p>Verifican que cada endpoint: devuelve 200/204 con el body correcto cuando
+ * Verifican que cada endpoint: devuelve 200/204 con el body correcto cuando
  * el usuario tiene el permiso requerido, devuelve 403 sin el permiso adecuado y
  * mapea las excepciones de negocio al formato JSON uniforme del
  * GlobalExceptionHandler (p. ej. Categoría no encontrada → 404 CATEGORY_ERROR).
@@ -126,7 +126,7 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(authorities = "ELIMINAR_CATEGORIAS")
     void eliminarCategoria_existente_devuelve200() throws Exception {
-        // Nota: CategoryController#delete devuelve void → el status es 200 OK
+        // Nota: CategoryController#delete devuelve void -> el status es 200 OK
         // (no 204 como en Product/Role/Provider, que usan ResponseEntity.noContent()).
         mockMvc.perform(delete("/api/local/categories/1"))
                 .andExpect(status().isOk());
@@ -137,7 +137,7 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(authorities = "ELIMINAR_CATEGORIAS")
     void eliminarCategoria_inexistente_devuelve404ConFormatoError() throws Exception {
-        // Excepción de negocio → el GlobalExceptionHandler responde 404 uniforme.
+        // Excepción de negocio -> el GlobalExceptionHandler responde 404 uniforme.
         doThrow(new CategoryException("Categoría no encontrada"))
                 .when(categoryService).delete(99L);
 

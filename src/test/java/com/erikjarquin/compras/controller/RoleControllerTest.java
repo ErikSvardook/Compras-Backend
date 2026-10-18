@@ -36,7 +36,7 @@ import com.erikjarquin.compras.service.RoleService;
 /**
  * Tests del controlador de roles.
  *
- * <p>Destacan el borrado (204) y el conflicto 409 cuando el rol tiene usuarios
+ * Destacan el borrado (204) y el conflicto 409 cuando el rol tiene usuarios
  * asignados, que es la regla de negocio documentada en RoleImpl.
  */
 @WebMvcTest(RoleController.class)

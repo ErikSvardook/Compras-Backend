@@ -50,7 +50,7 @@ import com.erikjarquin.compras.service.ReportsService;
  * Se contabilizan únicamente ventas con paymentStatus APPROVED (excluye
  * PENDING el monitor está atendiendo, REJECTED y REVERSED).
  *
- * Y además NO anuladas (V3, 2026-09-30). Anular una venta deja la
+ * Y además NO anuladas. Anular una venta deja la
  * fila con {@code cancelled = true} a propósito, es evidencia contable pero
  * NO cambia el {@code paymentStatus}, que sigue en APPROVED. Filtrar solo por
  * APPROVED hacía que una venta anulada siguiera sumando ingresos; con la
@@ -220,7 +220,7 @@ public class ReportsImpl implements ReportsService {
     }
 
     /**
-     * UTILIDAD del periodo (V3): ingresos − costo de lo vendido.
+     * UTILIDAD del periodo: ingresos − costo de lo vendido.
      *
      * El costo de lo vendido sale de {@code sumCostOfGoodsSold}, que suma
      * {@code quantity * unitCost} de los renglones: el costo congelado en cada
@@ -272,7 +272,7 @@ public class ReportsImpl implements ReportsService {
     }
 
     /**
-     * Detalle de UNA caja (V3): sus ventas y su utilidad.
+     * Detalle de UNA caja: sus ventas y su utilidad.
      *
      * Las ventas se leen por {@code cash_register_id} y se filtran las
      * anuladas. El costo se calcula recorriendo los renglones en vez de usar una
@@ -338,14 +338,14 @@ public class ReportsImpl implements ReportsService {
     }
 
     // =========================================================================
-    //  Reporte de CAJA con sus SESIONES (V5)
+    //  Reporte de CAJA con sus SESIONES
     // =========================================================================
 
     /**
      * Devuelve una caja física con todos sus turnos, filtrables por fecha y por
      * usuario.
      *
-     * <p><b>Por qué el filtro se aplica en Java y no en SQL.</b> Una caja tiene
+     * Por qué el filtro se aplica en Java y no en SQL. Una caja tiene
      * pocos turnos (dos o tres cajas, un turno diario cada una), así que el
      * conjunto es chico y se puede filtrar en memoria sin penalizar. A cambio,
      * una sola pasada de código calcula ventas, por-usuario, utilidad y el
@@ -353,7 +353,7 @@ public class ReportsImpl implements ReportsService {
      * distintas y luego reconciliarlas en Java, que es justo donde se
      * esconden los bugs.
      *
-     * <p><b>El filtro de usuario se hace sobre {@code sale.getUser()}</b>, que
+     * El filtro de usuario se hace sobre {@code sale.getUser()}, que
      * es LAZY. Por eso el método es {@code @Transactional}: dentro de la
      * transacción la sesión de JPA está abierta y el proxy se resuelve. Fuera de
      * ella saltaría una {@code LazyInitializationException}.
@@ -427,7 +427,7 @@ public class ReportsImpl implements ReportsService {
     /**
      * Un turno del reporte: sus montos salen de las ventas YA filtradas.
      *
-     * <p>Se calcula por sesión en vez de reutilizar {@code getCashReport} porque
+     * Se calcula por sesión en vez de reutilizar {@code getCashReport} porque
      * aquí los montos dependen del filtro, y ahí siempre son los del turno
      * completo. Reusarlo mezclaría ambos mundos y daría totales que no
      * corresponden a lo que el usuario está viendo.
@@ -463,7 +463,7 @@ public class ReportsImpl implements ReportsService {
 
             UserEntity usuario = venta.getUser();
             if(usuario == null){
-                //Venta anterior a V5: no tiene dueño. Se agrupa aparte en vez de
+                //Venta anterior: no tiene dueño. Se agrupa aparte en vez de
                 //inventar un "Desconocido" que parecería un usuario real.
                 sinUsuario = sinUsuario.add(venta.getTotal());
                 sinUsuarioTickets++;

@@ -39,7 +39,7 @@ import com.erikjarquin.compras.service.ReportsService;
 /**
  * Tests del controlador de reportes (dashboard).
  *
- * <p>Verifica los principales endpoints y el enrutado de parámetros opcionales
+ * Verifica los principales endpoints y el enrutado de parámetros opcionales
  * (from/to/groupBy), además del permiso único VER_REPORTES compartido por todos.
  */
 @WebMvcTest(ReportController.class)
@@ -126,7 +126,7 @@ class ReportControllerTest {
     }
 
     // =========================================================================
-    //  V3: utilidad y detalle por caja
+    //  Utilidad y detalle por caja
     // =========================================================================
 
     @Test

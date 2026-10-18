@@ -99,19 +99,17 @@ public class CashRegisterImpl implements CashRegisterService {
     /**
      * Abre un turno con una caja física ya registrada (V4).
      *
-     * <p><b>Qué cambió respecto a V3.</b> En V3 la fila de {@code cash_registers}
-     * <i>era</i> la caja, y como su número era UNIQUE no se podía volver a abrir.
+     * La fila de {@code cash_registers}
+     * era la caja, y como su número era UNIQUE no se podía volver a abrir.
      * Ahora el modelo separa dos conceptos que V3 confundía en una sola tabla:
-     * <ul>
-     *   <li>{@code cash_boxes}: las cajas FÍSICAS del local. Pocas filas.</li>
-     *   <li>{@code cash_registers}: las SESIONES. Una fila por cada apertura y
-     *       cierre. Crece todos los días.</li>
-     * </ul>
+     *   {@code cash_boxes}: las cajas FÍSICAS del local. Pocas filas.
+     *   {@code cash_registers}: las SESIONES. Una fila por cada apertura y
+     *       cierre. Crece todos los días.
      * Abrir es entonces: buscar la caja por número en {@code cash_boxes} y crear
      * una sesión nueva en {@code cash_registers} que apunte a ella. La misma caja
      * puede abrirse todos los días, y cada turno queda como una fila aparte.
      *
-     * <p>Se mantiene la regla de UNA caja abierta a la vez (409 si ya hay): dos
+     * Se mantiene la regla de UNA caja abierta a la vez (409 si ya hay): dos
      * cajas abiertas al mismo tiempo harían imposible saber a cuál pertenece cada
      * venta.
      */
@@ -196,13 +194,13 @@ public class CashRegisterImpl implements CashRegisterService {
     }
 
     // =========================================================================
-    //  CRUD de cajas físicas (V4)
+    //  CRUD de cajas físicas
     // =========================================================================
 
     /**
      * Registra una caja física nueva.
      *
-     * <p>No es abrir caja: esto solo la da de alta en el inventario del local.
+     * No es abrir caja: esto solo la da de alta en el inventario del local.
      * Abrir un turno es {@link #open(OpenCashRequest)}, que crea una SESIÓN
      * nueva apuntando a esta caja.
      */
@@ -232,7 +230,7 @@ public class CashRegisterImpl implements CashRegisterService {
     /**
      * Todas las cajas del local, incluidas las dadas de baja.
      *
-     * <p>Incluidas a propósito: la tabla "Ver cajas" es también el lugar donde se
+     * Incluidas a propósito: la tabla "Ver cajas" es también el lugar donde se
      * ve que una caja se dio de baja y por qué (tiene cortes). Ocultarlas
      * haría creer que desaparecieron.
      */
@@ -247,8 +245,8 @@ public class CashRegisterImpl implements CashRegisterService {
     /**
      * Cajas que se pueden abrir ahora: activas y sin ninguna sesión abierta.
      *
-     * <p>Alimenta el selector del modal "Abrir caja". Ya no se filtran en Java
-     * con "las que nunca se abrieron" (V3): una caja que se abrió el lunes se
+     * Alimenta el selector del modal "Abrir caja". Ya no se filtran en Java
+     * con "las que nunca se abrieron": una caja que se abrió el lunes se
      * vuelve a abrir el martes, así que el criterio correcto es "¿tiene algún
      * turno abierto AHORA?".
      */
@@ -297,12 +295,12 @@ public class CashRegisterImpl implements CashRegisterService {
     /**
      * Da de baja una caja: deja de ofrecerse al abrir, pero NO se borra.
      *
-     * <p>Esta es la única operación de "baja" que existe, y es a propósito. Una
+     * Esta es la única operación de "baja" que existe, y es a propósito. Una
      * caja que ya tuvo cortes tiene ventas apuntando a su sesión, y la sesión a
      * la caja. Borrarla dejaría ventas sin caja y el reporte "filtrar por caja"
      * no podría agruparlas: el historial de ese turno se volvería inalcanzable.
      *
-     * <p>Por eso el borrado físico solo tiene sentido para una caja que NUNCA se
+     * Por eso el borrado físico solo tiene sentido para una caja que NUNCA se
      * abrió (no tiene ventas). Ese caso no se expone como endpoint: se resuelve
      * desactivando, que es una operación reversible y sin consecuencias. Una caja
      * recién creada que se creó por error se da de baja y ya no estorba.
@@ -336,17 +334,17 @@ public class CashRegisterImpl implements CashRegisterService {
     }
 
     /**
-     * Da de ALTA una caja que estaba dada de baja (V5).
+     * Da de ALTA una caja que estaba dada de baja.
      *
-     * <p>Existe para que una caja retirada siga siendo recuperable. Sin esto,
+     * Existe para que una caja retirada siga siendo recuperable. Sin esto,
      * "dar de baja" sería una decisión irreversible y además malintencionada: si
      * se da de baja por error (o porque se estaba reparando y ya terminó), no
      * hay vuelta atrás.
      *
-     * <p><b>No se puede reutilizar el número para otra caja.</b> El UNIQUE está
+     * No se puede reutilizar el número para otra caja. El UNIQUE está
      * en {@code cash_boxes.number} y la fila NO se borra al dar de baja, así que
      * el número queda ocupado para siempre: la caja dada de baja y la que se
-     * re-activan son <b>la misma caja con su mismo historial</b>. Es lo correcto:
+     * re-activan son la misma caja con su mismo historial. Es lo correcto:
      * sus ventas siguen apuntando a sus turnos, y perder ese enlace dejaría
      * ventas sin caja.
      */
@@ -371,18 +369,18 @@ public class CashRegisterImpl implements CashRegisterService {
     /**
      * BORRA una caja, pero solo si nunca se abrió. Si ya tuvo turnos, da 409.
      *
-     * <p>Esta es la contraparte de {@link #desactiveBox(Long)} y implementa
-     * exactamente la regla del dueño: <b>lo que ya tuvo corte de caja no se
-     * borra, se da de baja.</b>
+     * Esta es la contraparte de {@link #desactiveBox(Long)} y implementa
+     * exactamente la regla del dueño: lo que ya tuvo corte de caja no se
+     * borra, se da de baja.
      *
-     * <p>Por qué el borrado físico es aceptable SOLO en este caso: una caja que
+     * Por qué el borrado físico es aceptable SOLO en este caso: una caja que
      * nunca se abrió no tiene sesiones, y las sesiones son las que apuntan a las
      * ventas. Sin sesiones no hay nada que romperse, así que borrarla es
      * limpio. En cuanto la caja tuvo un turno, sus ventas quedan colgando de él y
      * borrar dejaría ventas sin caja: el reporte "filtrar por caja" no podría
      * agruparlas y el corte de ese día sería inalcanzable.
      *
-     * <p>Por eso el borrado es condicional y el 409 dice exactamente qué hacer
+     * Por eso el borrado es condicional y el 409 dice exactamente qué hacer
      * ("dala de baja") en vez de dejar al usuario adivinando.
      */
     @Override
@@ -441,7 +439,7 @@ public class CashRegisterImpl implements CashRegisterService {
     /**
      * Caja física → DTO, enriquecida con cuántos turnos tiene y si está en uso.
      *
-     * <p>El conteo se hace con una consulta por caja. Son pocas cajas (dos o
+     * El conteo se hace con una consulta por caja. Son pocas cajas (dos o
      * tres), así que el N+1 es irrelevante y el código queda legible.
      */
     private CashBoxResponse toBoxResponse(CashBoxEntity caja){
@@ -562,7 +560,7 @@ public class CashRegisterImpl implements CashRegisterService {
     }
 
     /**
-     * Normaliza el número de caja: recorta y <b>capitaliza</b>.
+     * Normaliza el número de caja: recorta y apitaliza.
      *
      * Se capitaliza a propósito: "caja 1" y "CAJA 1" son la MISMA caja y
      * deben ser el mismo número. Sin esto el UNIQUE de PostgreSQL los dejaría
@@ -592,7 +590,7 @@ public class CashRegisterImpl implements CashRegisterService {
     /**
      * Sugiere el siguiente número libre con el patrón "CAJA n".
      *
-     * <p>Existe para que el alta de caja venga con "CAJA 7" ya escrito en vez de
+     * Existe para que el alta de caja venga con "CAJA 7" ya escrito en vez de
      * obligar a contar cuántas hay. Cuenta sobre {@code cash_boxes} (las cajas
      * físicas), que es donde el número es UNIQUE: si contara sobre los cortes,
      * sugeriría un número que una caja existente ya tiene y el alta fallaría
@@ -638,7 +636,7 @@ public class CashRegisterImpl implements CashRegisterService {
     }
 
     /**
-     * Historial de cajas (V3): la más reciente primero, para elegir cuál filtrar.
+     * Historial de cajas: la más reciente primero, para elegir cuál filtrar.
      * Incluye las que se crearon pero todavía no se abrieron.
      */
     @Override

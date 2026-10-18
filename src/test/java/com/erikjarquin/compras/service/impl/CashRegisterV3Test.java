@@ -41,15 +41,15 @@ import com.erikjarquin.compras.repository.SaleRepository;
 /**
  * Tests de la caja V4: cajas REUTILIZABLES y turnos.
  *
- * <p><b>Qué cambió respecto a V3 y por qué hay tantos tests nuevos.</b> En V3 una
+ * Qué cambió respecto a V3 y por qué hay tantos tests nuevos. Una
  * fila de {@code cash_registers} era "una caja" y su número era UNIQUE, así que
  * una caja se podía abrir una sola vez. El dueño aclaró el modelo real: hay dos
- * cajas f��sicas y se abren y cierran todos los días. V4 separa los dos conceptos
+ * cajas físicas y se abren y cierran todos los días. Se separan los dos conceptos
  * ({@code cash_boxes} = cajas, {@code cash_registers} = turnos) y por eso los
  * tests de "crear caja" y "caja ya usada" se reescribieron como tests de cajas y
  * de reapertura.
  *
- * <p>El bloque de {@link CuadreTest} no cambió: el cuadre del efectivo es
+ * El bloque de {@link CuadreTest} no cambió: el cuadre del efectivo es
  * exactamente igual. Se documenta aparte porque es la regla que másEXPONE dinero
  * del módulo.
  */
@@ -72,7 +72,7 @@ class CashRegisterV3Test {
     /**
      * Caja física con id.
      *
-     * <p>El id importa: en una entidad real JPA lo asigna al guardar, pero en un
+     * El id importa: en una entidad real JPA lo asigna al guardar, pero en un
      * test con Mockito la entidad es un objeto en blanco. Si el id fuera null, las
      * llamadas al repositorio pasarían null y los stubs ({@code ...ById(1L)})
      * no casarían. Por eso el helper lo fija siempre.
@@ -513,10 +513,8 @@ class CashRegisterV3Test {
         }
 
         /**
-         * ESTE es el test que prueba que V4 arregla lo que V3 rompía.
-         *
-         * <p>La misma caja que ya tuvo un corte el lunes se puede volver a abrir
-         * el martes. En V3 esto daba 409 y no había forma de abrir la caja que sí
+         * La misma caja que ya tuvo un corte el lunes se puede volver a abrir
+         * el martes. Esto daba 409 y no había forma de abrir la caja que sí
          * existía.
          */
         @Test
@@ -771,7 +769,7 @@ class CashRegisterV3Test {
         /**
          * Las ventas anuladas no cuentan ni para el dinero ni para los tickets.
          *
-         * <p>Contarlas dejaría el monto de una venta anulada dentro del "esperado":
+         * Contarlas dejaría el monto de una venta anulada dentro del "esperado":
          * el cajero contaría el efectivo real, no coincidiría, y vería una
          * diferencia fantasma de su propio bolsillo.
          */

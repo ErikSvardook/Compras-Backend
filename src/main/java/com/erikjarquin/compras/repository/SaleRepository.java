@@ -20,10 +20,9 @@ import com.erikjarquin.compras.model.enums.PaymentStatus;
  * de reportes ({@code ReportsImpl}), todas acotadas por rango de fechas y
  * estado APPROVED para no contabilizar ventas canceladas/reversadas.
  *
- * Todas las consultas filtran además {@code cancelled = false} (V3,
- * 2026-09-30). Hasta V2, anular una venta la BORRABA, así que nunca aparecía en
- * un reporte. V2 la dejó en la tabla con {@code cancelled = true} —a propósito,
- * porque es evidencia contable— y eso destapó este bug: {@code cancel()} no
+ * Todas las consultas filtran además {@code cancelled = false}. Anular una venta la BORRABA, así que nunca aparecía en
+ * un reporte. Dejó en la tabla con {@code cancelled = true} a propósito,
+ * porque es evidencia contable y eso destapó este bug: {@code cancel()} no
  * cambia el {@code paymentStatus}, que sigue en APPROVED. Resultado: una venta
  * anulada seguía sumando ingresos, y con V3 también sumaría costo, inflando la
  * utilidad. Filtrar por APPROVED no excluye las anuladas; hacen falta las
@@ -34,13 +33,13 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
     List<SaleEntity> findByCashRegister(CashRegisterEntity cashRegister);
 
     /**
-     * Venta ya creada con esta clave de idempotencia (V6).
+     * Venta ya creada con esta clave de idempotencia.
      *
-     * <p>Es lo que permite que un doble "Enter" en el modal de cobro NO haga
+     * Es lo que permite que un doble "Enter" en el modal de cobro NO haga
      * dos ventas: la segunda petición encuentra aquí la primera y devuelve esa
      * misma venta en vez de crear otra.
      *
-     * <p><b>Es un nombre DERIVADO y por eso funciona</b>: {@code findBy} +
+     * Es un nombre DERIVADO y por eso funciona: {@code findBy} +
      * {@code IdempotencyKey} resuelve a la propiedad {@code idempotencyKey} de
      * {@code SaleEntity}, que existe. (En cambio {@code existsByCashRegistersId}
      * en {@code CashBoxRepository} NO funcionaba, porque buscaba una propiedad
@@ -139,7 +138,7 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
             @Param("status") PaymentStatus status);
 
     /**
-     * UTILIDAD (V3): costo real de lo vendido en el rango.
+     * UTILIDAD: costo real de lo vendido en el rango.
      *
      * Suma {@code quantity * unitCost} de los renglones de las ventas válidas,
      * usando el costo CONGELADO en el renglón y no {@code product.cost}. Razón:
@@ -167,7 +166,7 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
             @Param("status") PaymentStatus status);
 
     /**
-     * Ventas de una caja concreta (V3), para el detalle "que se vendio en esta
+     * Ventas de una caja concreta, para el detalle "que se vendio en esta
      * caja". Filtra las anuladas igual que el resto de reportes.
      */
     @Query("""
@@ -179,7 +178,7 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
     List<SaleEntity> findValidSalesByCashId(@Param("cashId") Long cashId);
 
     /**
-     * Marca la venta como CONFIRMADA de forma atómica y condicional (V3).
+     * Marca la venta como CONFIRMADA de forma atómica y condicional.
      *
      * Devuelve el número de filas afectadas: 1 si esta petición ganó la
      * carrera, 0 si otra se adelantó. Mismo mecanismo que

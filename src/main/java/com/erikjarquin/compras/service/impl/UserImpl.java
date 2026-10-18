@@ -28,7 +28,7 @@ import com.erikjarquin.compras.util.InputValidator;
  *  - Un usuario no se borra físicamente: se desactiva (active=false) para
  *    conservar la integridad referencial con ventas/pagos históricos.
  *  - El email debe ser único en el sistema.
- *  - V7 (2026-10-04): nombre, correo y contraseña son OBLIGATORIOS y se validan
+ *  - Nombre, correo y contraseña son OBLIGATORIOS y se validan
  *    en el alta **y** en la edición. Antes la edición copiaba el texto crudo y
  *    lo único que frenaba un campo vacío era el NOT NULL de la base, que
  *    respondía con un 409 diciendo "el dato ya existe".
@@ -36,9 +36,9 @@ import com.erikjarquin.compras.util.InputValidator;
 @Service
 public class UserImpl implements UserService {
     /**
-     * Longitud mínima de la contraseña al dar de alta un usuario (V7).
+     * Longitud mínima de la contraseña al dar de alta un usuario.
      *
-     * <p>Es la misma que exigen los formularios del frontend. 🔑 Si se cambia en
+     * Es la misma que exigen los formularios del frontend. Si se cambia en
      * uno, hay que cambiarla en el otro: el backend es el que de verdad protege
      * el dato.
      */
@@ -65,7 +65,7 @@ public class UserImpl implements UserService {
     //Crear usuario
     @Override
     public UserDto createUser(CreateUserRequest request){
-        // V7: primero se VALIDA y se NORMALIZA, y solo después se busca el
+        // Primero se VALIDA y se NORMALIZA, y solo después se busca el
         // duplicado. Antes el findByEmail usaba el correo crudo y venía antes de
         // cualquier validación: dos consecuencias malas. Una, un correo vacío
         // llegaba al INSERT y la base lo rechazaba con un 409 que decía "el dato
@@ -99,7 +99,7 @@ public class UserImpl implements UserService {
             new IllegalArgumentException("Rol no encontrado"));
         user.setRole(role);
         user.setActive(true);
-        //"Dado de alta" = el momento en que se creó la cuenta (V5). Es la fecha
+        //"Dado de alta" = el momento en que se creó la cuenta. Es la fecha
         //que responde "¿desde cuándo trabaja con nosotros?".
         user.setActivatedAt(LocalDateTime.now());
         user.setDeactivatedAt(null);
@@ -120,7 +120,7 @@ public class UserImpl implements UserService {
         UserEntity user = repository.findById(id).orElseThrow(() ->
             new UserException("Usuario no encontrado"));
 
-        // V7: este método copiaba el texto CRUDO del request."name", "correo",
+        // Este método copiaba el texto CRUDO del request."name", "correo",
         // un nombre de 500 caracteres o un correo con mayúsculas y espacios se
         // guardaban tal cual, y lo único que frenaba un campo vacío era el NOT
         // NULL de la base. Ahora pasa por los mismos validadores que el alta.

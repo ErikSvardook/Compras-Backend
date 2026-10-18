@@ -40,7 +40,7 @@ import com.erikjarquin.compras.service.CashRegisterService;
 /**
  * Tests del controlador de caja registradora.
  *
- * <p>Cubre el CRUD de cajas físicas (V4), la apertura y cierre de turnos, el
+ * Cubre el CRUD de cajas físicas (V4), la apertura y cierre de turnos, el
  * resumen (hoja de corte) y la consulta de caja activa. También valida el
  * permiso específico de cada endpoint (ABRIR_CAJA / CERRAR_CAJA / CORTE_CAJA /
  * VER_CAJA / EDITAR_CAJA).
@@ -169,7 +169,7 @@ class CashRegisterControllerTest {
     // =========================================================================
 
     /**
-     * El número es OBLIGATORIO (V3): sin él la caja no se puede identificar en
+     * El número es OBLIGATORIO: sin él la caja no se puede identificar en
      * el historial ni en el filtro de reportes. Se declara en el servicio con un
      * 400, no por validación de bean, porque el mensaje puede explicar por qué
      * se necesita.
@@ -245,13 +245,13 @@ class CashRegisterControllerTest {
     }
 
     // =========================================================================
-    //  V4: CRUD de cajas físicas + apertura de turno
+    //  CRUD de cajas físicas + apertura de turno
     // =========================================================================
 
     /**
-     * Registrar caja física es un endpoint NUEVO y separado de abrir (V4).
+     * Registrar caja física es un endpoint NUEVO y separado de abrir.
      *
-     * <p>Es un CRUD del inventario de cajas del local: no abre un turno ni mueve
+     * Es un CRUD del inventario de cajas del local: no abre un turno ni mueve
      * dinero. Abrir un turno es {@code POST /open}, que crea una sesión nueva
      * apuntando a esta caja.
      */
@@ -362,7 +362,7 @@ class CashRegisterControllerTest {
     /**
      * Abrir un turno manda el número de una CAJA FÍSICA ya registrada.
      *
-     * <p>La misma caja puede abrirse otra vez en otro día: por eso el endpoint
+     * La misma caja puede abrirse otra vez en otro día: por eso el endpoint
      * sigue siendo el mismo y lo que cambia es que ahora crea una sesión nueva.
      */
     @Test
@@ -438,7 +438,7 @@ class CashRegisterControllerTest {
     /**
      * Borrar una caja que ya tuvo cortes da 409 y el mensaje dice "dala de baja".
      *
-     * <p>Es la regla del dueño: lo que ya tuvo corte de caja no se borra nunca.
+     * Es la regla del dueño: lo que ya tuvo corte de caja no se borra nunca.
      */
     @Test
     @WithMockUser(authorities = "ABRIR_CAJA")

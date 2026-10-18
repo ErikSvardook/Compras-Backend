@@ -13,12 +13,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Tests de {@link InputValidator}: las reglas del punto 7 del encargo.
+ * Tests de {@link InputValidator}.
  *
- * <p>Son tests de <b>texto</b> y no de números porque ahí está toda la razón de
+ * Son tests de texto y no de números porque ahí está toda la razón de
  * ser de la clase. Al convertir a {@code BigDecimal}, "000.2" ya es 0.2 y
  * "1.875" ya es 1.875: los errores de captura se pierden antes de poder
- * detectarlos. Estos tests fijan que el texto <i>no</i> se transforme antes de
+ * detectarlos. Estos tests fijan que el texto no se transforme antes de
  * validar.
  */
 @DisplayName("InputValidator - reglas de captura de los formularios")
@@ -67,7 +67,7 @@ class InputValidatorTest {
         @Test
         @DisplayName("es obligatorio: vacío, blancos o null lanzan (V7)")
         void vacioLanza(){
-            // V7 (2026-10-04): esto antes devolvía null y el SKU se guardaba
+            // Esto antes devolvía null y el SKU se guardaba
             // como NULL. Ahora es obligatorio, y el mensaje tiene que decir qué
             // campo falta: es lo que ve el usuario en el 400.
             assertThatThrownBy(() -> InputValidator.sku(""))
@@ -159,7 +159,7 @@ class InputValidatorTest {
         @Test
         @DisplayName("es obligatorio: vacío, blancos o null lanzan (V7)")
         void vacioLanza(){
-            // V7: antes el código de barras vacío devolvía null y se guardaba
+            // Antes el código de barras vacío devolvía null y se guardaba
             // como NULL. En el POS el producto se cobra escaneando, así que un
             // producto sin código es un producto que el cajero no puede cobrar
             // sin buscarlo a mano.
@@ -179,11 +179,11 @@ class InputValidatorTest {
     }
 
     // =========================================================================
-    //  Obligatoriedad: requerido() y password()  (V7)
+    //  Obligatoriedad: requerido() y password()
     //
     //  Estos dos métodos son los que evitan que un campo vacío llegue al
     //  INSERT. Antes cada servicio escribía su propio `if (x == null) throw`
-    //  —o no lo escribía, como el de usuario— y la base de datos respondía con
+    //  no lo escribía, como el de usuario— y la base de datos respondía con
     //  un 409 diciendo "el dato ya existe".
     // =========================================================================
     @Nested

@@ -25,9 +25,9 @@ import com.erikjarquin.compras.model.enums.PaymentMethod;
 import com.erikjarquin.compras.service.SaleService;
 
 /**
- * Tests del manejador de COBROS DUPLICADOS en el controlador (V6).
+ * Tests del manejador de COBROS DUPLICADOS en el controlador.
  *
- * <p>Cubre el caso que la comprobación previa de {@code SaleImpl} no puede
+ * Cubre el caso que la comprobación previa de {@code SaleImpl} no puede
  * cubrir: dos peticiones del mismo cobro que se cruzan y las dos intentan
  * insertar. El índice UNIQUE rechaza una; aquí se comprueba que el cajero
  * recibe su venta y NO un error 500.

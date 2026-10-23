@@ -61,3 +61,6 @@ uploads/
 ### Python (generadores de PDF en docs/) ###
 __pycache__/
 *.pyc
+
+AGENTS.md
+docs/PLAN.md

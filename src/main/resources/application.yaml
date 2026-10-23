@@ -63,9 +63,9 @@ spring:
       # update (dev local): Hibernate crea/actualiza las tablas automáticamente
       # (comodo mientras construyes el esquema). En SUPABASE/PRODUCCIÓN cambiar
       # a "validate": las tablas las crea SOLO Flyway (V1__init.sql) y Hibernate
-      # nada más valida que coinciden → define JPA_DDL_AUTO=validate en el entorno.
+      # nada más valida que coinciden -> define JPA_DDL_AUTO=validate en el entorno.
       #   Local   : JPA_DDL_AUTO=update (default)  ·  Supabase: JPA_DDL_AUTO=validate
-      ddl-auto: ${JPA_DDL_AUTO:update} #validate
+      ddl-auto: ${JPA_DDL_AUTO:validate} #update
     # false en producción (evita exponer SQL con datos en logs).
     # true por defecto para tu desarrollo local.
     show-sql: ${SHOW_SQL:true}

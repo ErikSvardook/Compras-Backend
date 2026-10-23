@@ -153,7 +153,7 @@ Requisitos: JDK 21, PostgreSQL corriendo en `localhost:5432` con la BD
 
 ## Despliegue (Railway)
 
-1. Railway → New Project → Deploy from GitHub repo (detecta el `Dockerfile`).
+1. Railway -> New Project -> Deploy from GitHub repo (detecta el `Dockerfile`).
 2. Configurar las Variables obligatorias y ajustables listadas arriba.
 3. **Postgres**: crear un servicio Railway Postgres y apuntar `DB_HOST`/`DB_PORT`.
 4. **Volumen persistente** montado en `/app/uploads` (UID 1001) para las imágenes.
@@ -200,7 +200,3 @@ Compras-Backend/
 - `ComprasApplicationTests` (`@SpringBootTest`) es el único test que NO corre en
   la suite: exige una BD real accesible. Usa
   `mvn test -Dtest='!ComprasApplicationTests'` para los 234 tests de lógica.
-- Documentación técnica en [`docs/`](./docs): `01-Fase1-Paquete-Compras-y-Prefijo-Api-Local.pdf`,
-  `02-Ciclo-Ventas-Integridad-Stock-Compras.pdf`,
-  `03-Confirmar-Compras-Utilidad-Cajas-Numeradas.pdf` y
-  `04-Precio-Venta-Caja-Cuadra-Validaciones.pdf`, con el código real de los archivos.

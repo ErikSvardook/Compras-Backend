@@ -43,9 +43,9 @@ Spring Boot 4 · Java 21 · PostgreSQL · Spring Data JPA · Spring Security + J
 ## Arquitectura
 
 ```
-controller/ → service/ (interfaz) → service/impl/ → repository/ → model/entity/
+controller/ -> service/ (interfaz) -> service/impl/ -> repository/ -> model/entity/
    │                                      │
-   │                    mapper/  ← DTOs  ─┤
+   │                    mapper/  <-> DTOs  ─┤
    │                                      │
    model/dto/  config/  exceptions/  jobs/
 ```
@@ -61,7 +61,7 @@ controller/ → service/ (interfaz) → service/impl/ → repository/ → model/
 ## Prefijos de la API
 
 La API está dividida en dos dominios independientes, separados por prefijo y por
-tipo de usuario (ver `docs/PLAN.md` §1-§2):
+tipo de usuario:
 
 | Prefijo | Quién lo usa | Qué hay | Autenticación |
 |---|---|---|---|
@@ -74,7 +74,7 @@ del storefront tendrá que mostrar las mismas imágenes.
 
 ## Endpoints principales
 
-Módulo → base bajo el prefijo `/api/local`:
+Módulo -> base bajo el prefijo `/api/local`:
 
 | Módulo | Base | Notas |
 |---|---|---|
@@ -120,7 +120,7 @@ PAYMENT_KEYSTORE_PASSWORD
 Con default ajustable:
 
 ```
-DB_HOST=localhost          DB_PORT=5432            DB_NAME=ventas_db
+DB_HOST=localhost          DB_PORT=5432            DB_NAME=compras_db
 PORT=8081                  CORS_ALLOWED_ORIGINS=http://localhost:4200
 FRONTEND_URL=http://localhost:4200
 UPLOAD_DIR=./uploads       UPLOAD_URL=http://localhost:8081/api/uploads
@@ -153,14 +153,13 @@ Requisitos: JDK 21, PostgreSQL corriendo en `localhost:5432` con la BD
 
 ## Despliegue (Railway)
 
-1. Subir el repo a GitHub (⚠️ purgar antes el historial de git: hay secretos viejos).
-2. Railway → New Project → Deploy from GitHub repo (detecta el `Dockerfile`).
-3. Configurar las Variables obligatorias y ajustables listadas arriba.
-4. **Postgres**: crear un servicio Railway Postgres y apuntar `DB_HOST`/`DB_PORT`.
-5. **Volumen persistente** montado en `/app/uploads` (UID 1001) para las imágenes.
-6. **Healthcheck**: NO existe `GET /ping`; apúntalo a un endpoint público, p. ej.
+1. Railway → New Project → Deploy from GitHub repo (detecta el `Dockerfile`).
+2. Configurar las Variables obligatorias y ajustables listadas arriba.
+3. **Postgres**: crear un servicio Railway Postgres y apuntar `DB_HOST`/`DB_PORT`.
+4. **Volumen persistente** montado en `/app/uploads` (UID 1001) para las imágenes.
+5. **Healthcheck**: NO existe `GET /ping`; apúntalo a un endpoint público, p. ej.
    `GET /api/local/auth/me`.
-7. HTTPS automático con el dominio `*.up.railway.app`; el frontend (Netlify)
+6. HTTPS automático con el dominio `*.up.railway.app`; el frontend (Netlify)
    usa la URL `https://<backend>.up.railway.app/api`.
 
 ## Estructura del repo
@@ -190,8 +189,6 @@ Compras-Backend/
 
 ## Notas
 
-- El estado del proyecto, decisiones y registro de cambios se mantiene en
-  [AGENTS.md](./AGENTS.md).
 - `application-local.yaml` y `uploads/` no se versionan en git (ver `.gitignore`).
 - El esquema lo crea **Flyway** (`db/migration/V1__init.sql` = base,
   `V2__venta_confirmada.sql` = ciclo de vida de la venta,

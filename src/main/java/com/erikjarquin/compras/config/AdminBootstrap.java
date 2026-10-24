@@ -66,7 +66,7 @@ public class AdminBootstrap implements CommandLineRunner {
                     new RuntimeException("Rol ADMIN no encontrado"));
 
             UserEntity admin = new UserEntity();
-            admin.setName("Erik");
+            admin.setName("Usuario administrador");
             admin.setEmail(adminEmail);
             admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setRole(adminRole);

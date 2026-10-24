@@ -1,16 +1,15 @@
 # ============================================================================
 #  Configuración de Compras-Backend
 # ----------------------------------------------------------------------------
-#  REGLA DE ORO PARA GIT:
 #   Este archivo SÍ se sube al repositorio, pero DEBE permanecer SIN secretos.
 #   Todos los valores sensibles se inyectan por VARIABLES DE ENTORNO (${...})
-#   o desde application-local.yaml (libro: ignorado por git, ver .gitignore).
+#   o desde application-local.yaml.
 #
 #  ¿DÓNDE VIVEN LOS VALORES DE ${DB_USER} / ${DB_PASSWORD} / etc.?
-#   - EN LOCAL (dev)        : dentro de src/main/resources/application-local.yaml
-#                             (archivo NO versionado, solo en tu máquina).
-#   - EN PRODUCCIÓN (Railway): en las "Variables" de entorno del servicio
-#                             (interfaz web de Railway o el archivo .env).
+#   - EN LOCAL (dev): dentro de src/main/resources/application-local.yaml
+#                    (archivo NO versionado, solo en tu máquina).
+#   - EN PRODUCCIÓN (Railway):en las "Variables" de entorno del servicio
+#                            (interfaz web de Railway o el archivo .env).
 #
 #  ORDEN DE PRECEDENCIA QUE USA SPRING PARA RESOLVER ${...} (mayor gana):
 #    1. Variables de entorno del sistema / de Railway
@@ -61,14 +60,13 @@ spring:
   jpa:
     hibernate:
       # update (dev local): Hibernate crea/actualiza las tablas automáticamente
-      # (comodo mientras construyes el esquema). En SUPABASE/PRODUCCIÓN cambiar
-      # a "validate": las tablas las crea SOLO Flyway (V1__init.sql) y Hibernate
+      # En supabase cambiar a "validate": las tablas las crea SOLO Flyway (V1__init.sql) y Hibernate
       # nada más valida que coinciden -> define JPA_DDL_AUTO=validate en el entorno.
       #   Local   : JPA_DDL_AUTO=update (default)  ·  Supabase: JPA_DDL_AUTO=validate
       ddl-auto: ${JPA_DDL_AUTO:validate} #update
     # false en producción (evita exponer SQL con datos en logs).
     # true por defecto para tu desarrollo local.
-    show-sql: ${SHOW_SQL:true}
+    show-sql: ${SHOW_SQL:false}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -91,8 +89,8 @@ spring:
 
 app:
   # URL del frontend (Angular). Se usa en los emails de recuperación de contraseña.
-  #   Local      : http://localhost:4200
-  #   Netlify    : https://tu-app.netlify.app   -> via FRONTEND_URL
+  #   Local: http://localhost:4200
+  #   Netlify: https://tu-app.netlify.app -> via FRONTEND_URL
   frontend-url: ${FRONTEND_URL:http://localhost:4200}
 
   mail:
@@ -102,10 +100,10 @@ app:
     from: ${RESEND_FROM:}
 
   # Control del SEED inicial de roles/permisos/admin (bootstraps).
-  #   true  (default) : crea roles si la tabla está vacía, crea permisos
+  #   true  (default): crea roles si la tabla está vacía, crea permisos
   #                     faltantes, crea el admin inicial y reasigna permisos.
-  #   false           : los bootstraps NO tocan roles/permisos/usuarios.
-  #                     Útil en producción o cuando quieres controlar todo a mano.
+  #   false: los bootstraps NO tocan roles/permisos/usuarios.
+  #          Útil en producción o cuando quieres controlar todo a mano.
   seed-bootstraps: ${APP_SEED_BOOTSTRAPS:true}
   # Carpeta física donde se guardan las imágenes de productos.
   #   Local   : ./uploads (default)

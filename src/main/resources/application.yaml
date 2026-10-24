@@ -62,7 +62,7 @@ spring:
       # update (dev local): Hibernate crea/actualiza las tablas automáticamente
       # En supabase cambiar a "validate": las tablas las crea SOLO Flyway (V1__init.sql) y Hibernate
       # nada más valida que coinciden -> define JPA_DDL_AUTO=validate en el entorno.
-      #   Local   : JPA_DDL_AUTO=update (default)  ·  Supabase: JPA_DDL_AUTO=validate
+      #   Local: JPA_DDL_AUTO=update (default), Supabase: JPA_DDL_AUTO=validate
       ddl-auto: ${JPA_DDL_AUTO:validate} #update
     # false en producción (evita exponer SQL con datos en logs).
     # true por defecto para tu desarrollo local.
@@ -100,21 +100,21 @@ app:
     from: ${RESEND_FROM:}
 
   # Control del SEED inicial de roles/permisos/admin (bootstraps).
-  #   true  (default): crea roles si la tabla está vacía, crea permisos
+  #   true(default): crea roles si la tabla está vacía, crea permisos
   #                     faltantes, crea el admin inicial y reasigna permisos.
   #   false: los bootstraps NO tocan roles/permisos/usuarios.
   #          Útil en producción o cuando quieres controlar todo a mano.
   seed-bootstraps: ${APP_SEED_BOOTSTRAPS:true}
   # Carpeta física donde se guardan las imágenes de productos.
-  #   Local   : ./uploads (default)
-  #   Railway : via UPLOAD_DIR apuntando al VOLUMEN persistente montado, p. ej.
+  #   Local: ./uploads (default)
+  #   Railway: via UPLOAD_DIR apuntando al VOLUMEN persistente montado, p. ej.
   #             /app/uploads -> navega a Railway -> Project -> el servicio ->
   #             Volumes tab -> crea un volumen con monte en /app/uploads, y
   #             define UPLOAD_DIR=/app/uploads e UPLOAD_URL=https://<tu-app>.
   upload-dir: ${UPLOAD_DIR:./uploads}
   # URL BASE pública con la que el frontend construye las rutas de imágenes:
-  #   Local   : http://localhost:8081/api/uploads
-  #   Railway : https://tu-backend.up.railway.app/api/uploads  -> via UPLOAD_URL
+  #   Local: http://localhost:8081/api/uploads
+  #   Railway: https://tu-backend.up.railway.app/api/uploads  -> via UPLOAD_URL
   upload-url: ${UPLOAD_URL:http://localhost:8081/api/uploads}
 
 server:

@@ -66,9 +66,9 @@ Con valor por defecto: `DB_HOST=localhost`, `DB_PORT=5432`, `DB_NAME=compras_db`
 ## Ejecutar y probar
 
 ```sh
-.\mvnw.cmd compile
-.\mvnw.cmd test -Dtest='!ComprasApplicationTests'
-.\mvnw.cmd spring-boot:run
+mvn compile
+mvn test -Dtest='!ComprasApplicationTests'
+mvn spring-boot:run
 ```
 
 Hay 292 tests en verde, sin fallos ni errores, con el comando de tests anterior.
